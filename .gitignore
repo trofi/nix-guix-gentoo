@@ -1,0 +1,7 @@
+*.swp
+*~
+
+# egencache autostuff
+metadata/cache/
+metadata/md5-cache/
+profiles/use.local.desc
