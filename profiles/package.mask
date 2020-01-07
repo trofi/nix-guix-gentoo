@@ -1,4 +1,0 @@
-# Sergei Trofimovich <slyfox@gentoo.org> (2019-11-25)
-# Undo ::gentoo's masks until packages go away from ::gentoo.
--sys-apps/nix
--sys-apps/guix
