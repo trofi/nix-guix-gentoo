@@ -1,0 +1,38 @@
+From 88bc3c89bf5145d24c2270d2192b7be547e0024f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ludovic=20Court=C3=A8s?= <ludo@gnu.org>
+Date: Sun, 2 Jun 2019 01:29:38 +0200
+Subject: [PATCH: core-updates] progress: Provide the proper type for
+ %PROGRESS-INTERVAL.
+
+The (srfi srfi-19) module of Guile 2.9.2 catches the wrong type.
+
+* guix/progress.scm (%progress-interval): Change type to TIME-DURATION.
+---
+ guix/progress.scm | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/guix/progress.scm b/guix/progress.scm
+index 65080bcf24..f150b081d6 100644
+--- a/guix/progress.scm
++++ b/guix/progress.scm
+@@ -1,7 +1,7 @@
+ ;;; GNU Guix --- Functional package management for GNU
+ ;;; Copyright © 2017 Sou Bunnbu <iyzsong@gmail.com>
+ ;;; Copyright © 2015 Steve Sprang <scs@stevesprang.com>
+-;;; Copyright © 2017, 2018 Ludovic Courtès <ludo@gnu.org>
++;;; Copyright © 2017, 2018, 2019 Ludovic Courtès <ludo@gnu.org>
+ ;;; Copyright © 2018 Clément Lassieur <clement@lassieur.org>
+ ;;;
+ ;;; This file is part of GNU Guix.
+@@ -229,7 +229,7 @@ throughput."
+ 
+ (define %progress-interval
+   ;; Default interval between subsequent outputs for rate-limited displays.
+-  (make-time time-monotonic 200000000 0))
++  (make-time time-duration 200000000 0))
+ 
+ (define* (progress-reporter/file file size
+                                  #:optional (log-port (current-output-port))
+-- 
+2.25.0
+

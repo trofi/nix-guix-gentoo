@@ -1,0 +1,33 @@
+From b6f5339dd0180fe73ab70d9c5b851ca0adc04193 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ludovic=20Court=C3=A8s?= <ludo@gnu.org>
+Date: Mon, 24 Jun 2019 23:10:13 +0200
+Subject: [PATCH: core-updates] progress: Call 'time-difference' on times of
+ the same type.
+
+Guile 2.2.5 and 2.9.2 would catch the issue.
+This is a followup to 88bc3c89bf5145d24c2270d2192b7be547e0024f.
+
+* guix/progress.scm (display-download-progress)[elapsed]: Pass
+'current-time' the same type as START-TIME.
+---
+ guix/progress.scm | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/guix/progress.scm b/guix/progress.scm
+index f150b081d6..349637dbcf 100644
+--- a/guix/progress.scm
++++ b/guix/progress.scm
+@@ -197,7 +197,9 @@ object) and TRANSFERRED (a total number of bytes) to determine the
+ throughput."
+   (define elapsed
+     (duration->seconds
+-     (time-difference (current-time time-monotonic) start-time)))
++     (time-difference (current-time (time-type start-time))
++                      start-time)))
++
+   (if (and (number? size) (not (zero? size)))
+       (let* ((%  (* 100.0 (/ transferred size)))
+              (throughput (/ transferred elapsed))
+-- 
+2.25.0
+
