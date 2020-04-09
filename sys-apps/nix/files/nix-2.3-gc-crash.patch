@@ -1,0 +1,26 @@
+From 04bedda0b605dcecacb23b65d5a05c8f4aecfbdd Mon Sep 17 00:00:00 2001
+From: Philipp Middendorf <middendorf@plapadoo.de>
+Date: Thu, 9 Apr 2020 17:05:29 +0200
+Subject: [PATCH] gc.cc: Ignore hidden files in temproots
+
+---
+ src/libstore/gc.cc | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+--- a/src/libstore/gc.cc
++++ b/src/libstore/gc.cc
+@@ -202,6 +202,11 @@ void LocalStore::findTempRoots(FDs & fds, Roots & tempRoots, bool censor)
+     /* Read the `temproots' directory for per-process temporary root
+        files. */
+     for (auto & i : readDirectory(tempRootsDir)) {
++        if (i.name[0] == '.') {
++            // Ignore hidden files. Some package managers (notably portage) create
++            // those to keep the directory alive.
++            continue;
++        }
+         Path path = tempRootsDir + "/" + i.name;
+ 
+         pid_t pid = std::stoi(i.name);
+-- 
+2.26.0
+
