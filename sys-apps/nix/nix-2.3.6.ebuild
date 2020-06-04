@@ -41,6 +41,15 @@ DEPEND="${RDEPEND}
 	>=sys-devel/flex-2.5.35
 "
 
+# https://github.com/trofi/nix-guix-gentoo/issues/8
+# Account for missing upstream m4 files from tarball:
+# dev-util/pkgconfig: m4/pkg.m4
+# sys-devel/autoconf-archive: m4/ax_boost_base.m4, m4/ax_require_defined.m4
+DEPEND+="
+	sys-devel/autoconf-archive
+	virtual/pkgconfig
+"
+
 PATCHES=(
 	"${FILESDIR}"/${PN}-2.3-libpaths.patch
 	"${FILESDIR}"/${PN}-2.3-bootstrap.patch
