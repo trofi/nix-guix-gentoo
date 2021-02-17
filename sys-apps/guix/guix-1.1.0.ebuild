@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -80,9 +80,9 @@ DOC_CONTENTS="Quick start user guide on Gentoo:
 
 [as root] allow binary substitution to be downloaded (optional)
 	# guix archive --authorize < /usr/share/guix/ci.guix.info.pub
-[as root] enable guix-daemon service:
-	[systemd] # systemctl enable guix-daemon
-	[openrc]  # rc-update add guix-daemon
+[as root] enable and start guix-daemon service:
+	[systemd] # systemctl enable guix-daemon && systemctl start guix-daemon
+	[openrc]  # rc-update add guix-daemon && /etc/init.d/guix-daemon start
 [as a user] ln -sf /var/guix/profiles/per-user/\$USER/guix-profile \$HOME/.guix-profile
 [as a user] install guix packages:
 	\$ guix package -i hello
