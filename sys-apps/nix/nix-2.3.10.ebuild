@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -60,8 +60,8 @@ DISABLE_AUTOFORMATTING=yes
 DOC_CONTENTS=" Quick start user guide on Gentoo:
 
 [as root] enable nix-daemon service:
-	[systemd] # systemctl enable nix-daemon
-	[openrc]  # rc-update add nix-daemon
+	[systemd] # systemctl enable nix-daemon && systemctl start nix-daemon
+	[openrc]  # rc-update add nix-daemon && /etc/init.d/nix-daemon start
 [as a user] relogin to get environment and profile update
 [as a user] fetch nixpkgs update:
 	\$ nix-channel --update
