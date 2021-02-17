@@ -64,6 +64,7 @@ DOC_CONTENTS=" Quick start user guide on Gentoo:
 	[openrc]  # rc-update add nix-daemon && /etc/init.d/nix-daemon start
 [as a user] relogin to get environment and profile update
 [as a user] fetch nixpkgs update:
+	\$ nix-channel --add https://nixos.org/channels/nixpkgs-unstable
 	\$ nix-channel --update
 [as a user] install nix packages:
 	\$ nix-env -i mc
