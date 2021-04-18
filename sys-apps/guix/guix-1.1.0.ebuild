@@ -23,7 +23,7 @@ binary_src_uris() {
 		# $1              $2       $3
 		# "armhf-linux    20150101 guile-2.0.11.tar.xz"
 		set -- ${system_date_guilep}
-		uri="mirror://gnu-alpha/${PN}/bootstrap/$1/$2/$3"
+		uri="https://alpha.gnu.org/gnu/${PN}/bootstrap/$1/$2/$3"
 		# ${uri} -> guix-bootstrap-armhf-linux-20150101-guile-2.0.11.tar.xz.bootstrap
 		echo "${uri} -> guix-bootstrap-$1-$2-$3.bootstrap"
 	done
