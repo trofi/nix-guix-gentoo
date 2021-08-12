@@ -1,0 +1,111 @@
+Adapt to Aws::String / std::string conversions.
+--- a/src/libstore/s3-binary-cache-store.cc
++++ b/src/libstore/s3-binary-cache-store.cc
+@@ -29,6 +29,10 @@ using namespace Aws::Transfer;
+ 
+ namespace nix {
+ 
++/* Convert tring types. They differ only by allocator type. */
++std::string a2s (const Aws::String & s) { return std::string(std::cbegin(s), std::cend(s)); }
++Aws::String s2a (const std::string & s) { return Aws::String(std::cbegin(s), std::cend(s)); }
++
+ struct S3Error : public Error
+ {
+     Aws::S3::S3Errors err;
+@@ -44,7 +48,7 @@ R && checkAws(const FormatOrString & fs, Aws::Utils::Outcome<R, E> && outcome)
+     if (!outcome.IsSuccess())
+         throw S3Error(
+             outcome.GetError().GetErrorType(),
+-            fs.s + ": " + outcome.GetError().GetMessage());
++            fs.s + ": " + a2s(outcome.GetError().GetMessage()));
+     return outcome.GetResultWithOwnership();
+ }
+ 
+@@ -54,7 +58,7 @@ class AwsLogger : public Aws::Utils::Logging::FormattedLogSystem
+ 
+     void ProcessFormattedStatement(Aws::String && statement) override
+     {
+-        debug("AWS: %s", chomp(statement));
++        debug("AWS: %s", chomp(a2s(statement)));
+     }
+ 
+ #if !(AWS_VERSION_MAJOR <= 1 && AWS_VERSION_MINOR <= 7 && AWS_VERSION_PATCH <= 115)
+@@ -143,8 +147,8 @@ S3Helper::DownloadResult S3Helper::getObject(
+ 
+     auto request =
+         Aws::S3::Model::GetObjectRequest()
+-        .WithBucket(bucketName)
+-        .WithKey(key);
++        .WithBucket(s2a(bucketName))
++        .WithKey(s2a(key));
+ 
+     request.SetResponseStreamFactory([&]() {
+         return Aws::New<std::stringstream>("STRINGSTREAM");
+@@ -159,7 +163,7 @@ S3Helper::DownloadResult S3Helper::getObject(
+         auto result = checkAws(fmt("AWS error fetching '%s'", key),
+             client->GetObject(request));
+ 
+-        res.data = decompress(result.GetContentEncoding(),
++        res.data = decompress(a2s(result.GetContentEncoding()),
+             dynamic_cast<std::stringstream &>(result.GetBody()).str());
+ 
+     } catch (S3Error & e) {
+@@ -242,8 +246,8 @@ struct S3BinaryCacheStoreImpl : public S3BinaryCacheStore
+ 
+         auto res = s3Helper.client->HeadObject(
+             Aws::S3::Model::HeadObjectRequest()
+-            .WithBucket(bucketName)
+-            .WithKey(path));
++            .WithBucket(s2a(bucketName))
++            .WithKey(s2a(path)));
+ 
+         if (!res.IsSuccess()) {
+             auto & error = res.GetError();
+@@ -306,7 +310,7 @@ struct S3BinaryCacheStoreImpl : public S3BinaryCacheStore
+ 
+             std::shared_ptr<TransferHandle> transferHandle =
+                 transferManager->UploadFile(
+-                    stream, bucketName, path, mimeType,
++                    stream, s2a(bucketName), s2a(path), s2a(mimeType),
+                     Aws::Map<Aws::String, Aws::String>(),
+                     nullptr /*, contentEncoding */);
+ 
+@@ -324,13 +328,13 @@ struct S3BinaryCacheStoreImpl : public S3BinaryCacheStore
+ 
+             auto request =
+                 Aws::S3::Model::PutObjectRequest()
+-                .WithBucket(bucketName)
+-                .WithKey(path);
++                .WithBucket(s2a(bucketName))
++                .WithKey(s2a(path));
+ 
+-            request.SetContentType(mimeType);
++            request.SetContentType(s2a(mimeType));
+ 
+             if (contentEncoding != "")
+-                request.SetContentEncoding(contentEncoding);
++                request.SetContentEncoding(s2a(contentEncoding));
+ 
+             auto stream = std::make_shared<istringstream_nocopy>(data);
+ 
+@@ -397,9 +401,9 @@ struct S3BinaryCacheStoreImpl : public S3BinaryCacheStore
+             auto res = checkAws(format("AWS error listing bucket '%s'") % bucketName,
+                 s3Helper.client->ListObjects(
+                     Aws::S3::Model::ListObjectsRequest()
+-                    .WithBucket(bucketName)
++                    .WithBucket(s2a(bucketName))
+                     .WithDelimiter("/")
+-                    .WithMarker(marker)));
++                    .WithMarker(s2a(marker))));
+ 
+             auto & contents = res.GetContents();
+ 
+@@ -407,7 +411,7 @@ struct S3BinaryCacheStoreImpl : public S3BinaryCacheStore
+                 % contents.size() % res.GetNextMarker());
+ 
+             for (auto object : contents) {
+-                auto & key = object.GetKey();
++                auto key = a2s(object.GetKey());
+                 if (key.size() != 40 || !hasSuffix(key, ".narinfo")) continue;
+                 paths.insert(storeDir + "/" + key.substr(0, key.size() - 8));
+             }
