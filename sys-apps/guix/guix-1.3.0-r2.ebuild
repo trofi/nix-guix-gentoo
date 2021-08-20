@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit autotools git-r3 linux-info readme.gentoo-r1 systemd user
+inherit autotools linux-info readme.gentoo-r1 systemd user
 
 DESCRIPTION="GNU package manager (nix sibling)"
 HOMEPAGE="https://www.gnu.org/software/guix/"
@@ -41,12 +41,12 @@ copy_boot_guile_binaries() {
 	done
 }
 
-SRC_URI="$(binary_src_uris)"
-EGIT_REPO_URI="https://git.savannah.gnu.org/git/guix.git"
+SRC_URI="mirror://gnu/${PN}/${P}.tar.gz
+	$(binary_src_uris)"
 
 LICENSE="GPL-3"
 SLOT="0"
-#KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RESTRICT=test # complains about size of config.log and refuses to start tests
@@ -73,7 +73,7 @@ DEPEND="${RDEPEND}
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-9999-default-daemon.patch
+	"${FILESDIR}"/${PN}-0.16.0-default-daemon.patch
 )
 
 QA_PREBUILT="usr/share/guile/site/*/gnu/packages/bootstrap/*"
@@ -120,9 +120,6 @@ src_prepare() {
 	copy_boot_guile_binaries
 
 	default
-
-	./bootstrap || die
-
 	# build system is very eager to run automake itself: bug #625166
 	eautoreconf
 
