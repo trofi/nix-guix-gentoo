@@ -93,6 +93,9 @@ src_configure() {
 	busybox_set_config     FEATURE_SEAMLESS_XZ y # currently used by nix
 	busybox_set_config     FEATURE_SEAMLESS_BZ2 y
 	busybox_set_config     FEATURE_SEAMLESS_GZ y
+
+	# sharutils's test suite uses /bin/sh and needs 'tar cf' to work
+	busybox_set_config FEATURE_TAR_CREATE y
 }
 
 src_compile() {
