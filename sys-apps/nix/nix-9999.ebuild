@@ -36,7 +36,7 @@ RDEPEND="
 		dev-libs/libxslt
 		app-text/docbook-xsl-stylesheets
 	)
-	s3? ( dev-libs/aws-sdk-cpp[s3] )
+	s3? ( dev-libs/aws-sdk-cpp[-custom-memory-management,s3] )
 	sodium? ( dev-libs/libsodium:0= )
 "
 DEPEND="${RDEPEND}
@@ -56,7 +56,6 @@ DEPEND+="
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-9999-inplace-nix.patch
-	"${FILESDIR}"/${PN}-9999-aws-sdk.patch
 )
 
 DISABLE_AUTOFORMATTING=yes
