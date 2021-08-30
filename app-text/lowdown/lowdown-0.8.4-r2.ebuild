@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # ::nix-guix note:
-# - fix library installation (needed by nix), while at it install shared lib
+# - fix library installation (needed by nix), while at it install shared lib: https://bugs.gentoo.org/811111
 
 EAPI=8
 
