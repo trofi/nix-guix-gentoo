@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # ::nix-guix note:
-# - provide an option to disable custome memory managenet: https://bugs.gentoo.org/811108
+# - provide an option to disable custome memory management: https://bugs.gentoo.org/811108
 
 EAPI=7
 
