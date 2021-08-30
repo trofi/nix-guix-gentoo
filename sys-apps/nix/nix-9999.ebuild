@@ -55,9 +55,7 @@ DEPEND+="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-9999-libpaths.patch
 	"${FILESDIR}"/${PN}-9999-inplace-nix.patch
-	"${FILESDIR}"/${PN}-9999-DESTDIR.patch
 	"${FILESDIR}"/${PN}-9999-aws-sdk.patch
 )
 
