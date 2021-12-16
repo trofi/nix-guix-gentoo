@@ -3,6 +3,7 @@
 
 # ::nix-guix note:
 # - fix library installation (needed by nix), while at it install shared lib: https://bugs.gentoo.org/811111
+# - version bump
 
 EAPI=8
 
@@ -25,7 +26,7 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 PATCHES=(
-	"${FILESDIR}"/${P}-shared.patch
+	"${FILESDIR}"/${PN}-0.8.4-shared.patch
 )
 
 src_configure() {
