@@ -25,6 +25,7 @@ RDEPEND="
 	dev-cpp/gtest
 	dev-db/sqlite
 	dev-libs/editline:0=
+	dev-libs/libcpuid:0=
 	dev-libs/openssl:0=
 	>=dev-libs/boost-1.66:0=[context]
 	net-misc/curl
@@ -41,12 +42,12 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	app-text/mdbook
+	dev-cpp/nlohmann_json
 	>=sys-devel/bison-2.6
 	>=sys-devel/flex-2.5.35
 "
 
-# https://github.com/trofi/nix-guix-gentoo/issues/8
-# Account for missing upstream m4 files from tarball:
+# Upstream does not bundle .m4 files, extract from upstreams:
 # dev-util/pkgconfig: m4/pkg.m4
 # sys-devel/autoconf-archive: m4/ax_boost_base.m4, m4/ax_require_defined.m4
 DEPEND+="
@@ -55,6 +56,7 @@ DEPEND+="
 "
 
 PATCHES=(
+	# TODO: port nix-2.3-libpaths.patch
 	"${FILESDIR}"/${PN}-9999-inplace-nix.patch
 )
 
@@ -115,7 +117,9 @@ src_configure() {
 }
 
 src_compile() {
-	emake V=1
+	# Upstream does not support building without installation.
+	# Rely on src_install's DESTDIR=.
+	:
 }
 
 src_install() {
