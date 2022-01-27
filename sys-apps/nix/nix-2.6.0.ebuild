@@ -154,6 +154,11 @@ src_install() {
 		rm "${ED}"/etc/profile.d/nix.sh || die
 		rm "${ED}"/etc/profile.d/nix-daemon.sh || die
 	fi
+
+	# Remove bundled nlohmann_json to avoid file collisions
+	# Fixed in upcoming release.
+	rm ${D}/usr/include/nlohmann/json.hpp || die
+	rm ${D}/usr/include/nlohmann/json_fwd.hpp || die
 }
 
 pkg_postinst() {
