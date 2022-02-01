@@ -75,6 +75,7 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-0.16.0-default-daemon.patch
+	"${FILESDIR}"/${PN}-1.3.0-compression-error.patch
 )
 
 QA_PREBUILT="usr/share/guile/site/*/gnu/packages/bootstrap/*"

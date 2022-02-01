@@ -1,0 +1,34 @@
+From fa9afd20041b033974492e6ad99a2dfc6cbcdba9 Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Tue, 1 Feb 2022 08:42:29 +0000
+Subject: [PATCH] guix/narinfo.scm: improve error message on unsupported
+ compression types
+
+In https://github.com/trofi/nix-guix-gentoo/issues/14 Gooberpatrol66
+reports the crash during substitution against servers that provide
+only zstd compression.
+
+In this case guix-daemon did not provide zstd support and failed abruptly.
+
+The change does not add any fallbacks and only improve the error.
+---
+ guix/narinfo.scm | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/guix/narinfo.scm b/guix/narinfo.scm
+index 4fc550aa6c..68de0db042 100644
+--- a/guix/narinfo.scm
++++ b/guix/narinfo.scm
+@@ -344,4 +344,8 @@ (define (speed<? c1 c2)
+ 
+   (match (sort choices (if fast-decompression? (negate speed<?) file-size<?))
+     (((uri compression file-size) _ ...)
+-     (values uri compression file-size))))
++     (values uri compression file-size))
++    ('() (leave
++           (G_ "unsupported compression methods '~a' at '~a'~%")
++               (narinfo-compressions narinfo)
++               (narinfo-uri-base narinfo)))))
+-- 
+2.34.1
+
