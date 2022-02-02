@@ -1,0 +1,36 @@
+From 43509cc69d24d3b8def894a2d47338b7873dc0f4 Mon Sep 17 00:00:00 2001
+From: Thomas Koch <thomas@koch.ro>
+Date: Sun, 30 Jan 2022 20:59:58 +0200
+Subject: [PATCH] use LOWDOWN_LIBS variable
+
+fixes: #5931
+---
+ Makefile.config.in  | 1 +
+ src/libcmd/local.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.config.in b/Makefile.config.in
+index c8c4446b45a..3505f337e9a 100644
+--- a/Makefile.config.in
++++ b/Makefile.config.in
+@@ -16,6 +16,7 @@ LDFLAGS = @LDFLAGS@
+ LIBARCHIVE_LIBS = @LIBARCHIVE_LIBS@
+ LIBBROTLI_LIBS = @LIBBROTLI_LIBS@
+ LIBCURL_LIBS = @LIBCURL_LIBS@
++LOWDOWN_LIBS = @LOWDOWN_LIBS@
+ OPENSSL_LIBS = @OPENSSL_LIBS@
+ LIBSECCOMP_LIBS = @LIBSECCOMP_LIBS@
+ PACKAGE_NAME = @PACKAGE_NAME@
+diff --git a/src/libcmd/local.mk b/src/libcmd/local.mk
+index 8b0662753c4..7a2f83cc771 100644
+--- a/src/libcmd/local.mk
++++ b/src/libcmd/local.mk
+@@ -8,7 +8,7 @@ libcmd_SOURCES := $(wildcard $(d)/*.cc)
+ 
+ libcmd_CXXFLAGS += -I src/libutil -I src/libstore -I src/libexpr -I src/libmain -I src/libfetchers
+ 
+-libcmd_LDFLAGS += -llowdown -pthread
++libcmd_LDFLAGS += $(LOWDOWN_LIBS) -pthread
+ 
+ libcmd_LIBS = libstore libutil libexpr libmain libfetchers
+ 

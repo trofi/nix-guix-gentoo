@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic linux-info readme.gentoo-r1 user
+inherit autotools flag-o-matic linux-info readme.gentoo-r1 user toolchain-funcs
 
 DESCRIPTION="A purely functional package manager"
 HOMEPAGE="https://nixos.org/nix"
@@ -20,7 +20,7 @@ RDEPEND="
 	app-arch/bzip2
 	app-arch/xz-utils
 	app-misc/jq
-	app-text/lowdown
+	>=app-text/lowdown-0.10-r1
 	dev-cpp/gtest
 	dev-db/sqlite
 	dev-libs/editline:0=
@@ -55,8 +55,8 @@ DEPEND+="
 "
 
 PATCHES=(
-	# TODO: port nix-2.3-libpaths.patch
-	"${FILESDIR}"/${PN}-9999-inplace-nix.patch
+	"${FILESDIR}"/${PN}-2.6-libpaths.patch
+	"${FILESDIR}"/${PN}-2.6-inplace-nix.patch
 )
 
 DISABLE_AUTOFORMATTING=yes
@@ -101,6 +101,10 @@ src_prepare() {
 	default
 
 	eautoreconf
+
+	# rely on users settings
+	sed 's/GLOBAL_CXXFLAGS += -O3/GLOBAL_CXXFLAGS += /' -i Makefile || die
+	sed 's/GLOBAL_CXXFLAGS += -O3/GLOBAL_CXXFLAGS += /' -i perl/Makefile || die
 }
 
 src_configure() {
@@ -113,6 +117,13 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/nix/var \
 		$(use_enable gc) \
 		--with-sandbox-shell="${EPREFIX}"/usr/bin/busybox-nix-sandbox-shell
+
+	emake Makefile.config # gets generated late
+	cat >> Makefile.config <<-EOF
+	V = 1
+	CC = $(tc-getCC)
+	CXX = $(tc-getCXX)
+	EOF
 }
 
 src_compile() {
