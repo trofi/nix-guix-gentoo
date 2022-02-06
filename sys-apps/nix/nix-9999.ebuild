@@ -21,7 +21,7 @@ RDEPEND="
 	app-arch/bzip2
 	app-arch/xz-utils
 	app-misc/jq
-	>=app-text/lowdown-0.10-r1
+	>=app-text/lowdown-0.10.0-r2
 	dev-cpp/gtest
 	dev-db/sqlite
 	dev-libs/editline:0=
