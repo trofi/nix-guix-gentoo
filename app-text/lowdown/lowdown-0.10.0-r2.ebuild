@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # ::nix-guix note:
-# - fix library installation (needed by nix): https://bugs.gentoo.org/832590
+# - fix library underlinking (needed by nix): https://bugs.gentoo.org/832797
 
 EAPI=8
 
@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 DEPEND="
-	app-crypt/libmd
+	app-crypt/libmd:=
 	virtual/libcrypt:=
 "
 RDEPEND="${DEPEND}"
