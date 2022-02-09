@@ -38,9 +38,48 @@ echo "*/*::nix-guix" >> /etc/portage/package.accept_keywords
 
 # Setup
 
+## Nix
+
+### Installation
+
+The installation follows typical process of installing a
+daemon in gentoo:
+
+```bash
+emerge nix
+# on system systems:
+systemctl enable nix-daemon && systemctl start nix-daemon
+# on openrc systems:
+rc-update add nix-daemon && /etc/init.d/nix-daemon start
+```
+
+Then relogin as your user to import profile variables and
+pull in package definitions:
+
+```
+nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+nix-channel --update
+```
+
+Next steps to try `nix` in action:
+
+- <https://trofi.github.io/posts/196-nix-on-gentoo-howto.html>
+- <https://nixos.org/manual/nixpkgs/stable/>
 
 ## Guix
 
+### Installation
+
+The installation follows typical process of installing a
+daemon in gentoo:
+
+```bash
+emerge guix
+# on system systems:
+systemctl enable guix-daemon && systemctl start guix-daemon
+# on openrc systems:
+rc-update add guix-daemon && /etc/init.d/guix-daemon start
+```
 
 ### First run
 
@@ -73,3 +112,8 @@ it's `PATH` to your shell as well by following `guix pull`'s
 export PATH="$HOME/.config/guix/current/bin:$PATH"
 export INFOPATH="$HOME/.config/guix/current/share/info:$INFOPATH"
 ```
+
+Next steps to try `guix` in action:
+
+- <http://trofi.github.io/posts/197-guix-on-gentoo-howto.html>
+- <https://guix.gnu.org/manual/>
