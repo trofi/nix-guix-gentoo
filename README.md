@@ -2,6 +2,39 @@
 
 Gentoo overlay for Nix and Guix functional package managers.
 
+# Enabling the overlay
+
+First, let's enable the overlay. We can either use the
+eselect-repository method:
+
+```bash
+# Install eselect-repository if you don't already have it
+emerge app-eselect/eselect-repository
+# Fetch and output the list of overlays
+eselect repository list
+eselect repository enable nix-guix
+```
+
+or we can use the layman method:
+
+```bash
+# Add important USE flags for layman to your package.use directory:
+echo "app-portage/layman sync-plugin-portage git" >> /etc/portage/package.use/layman
+# Install layman if you don't already have it
+emerge app-portage/layman
+# Rebuild layman's repos.conf file:
+layman-updater -R
+# Add the Gentoo Haskell overlay:
+layman -a nix-guix
+```
+
+Finally, we need to unmask the overlay (this does not apply if your system
+is already running ~arch):
+
+```bash
+# Unmask ~testing versions for your arch:
+echo "*/*::nix-guix" >> /etc/portage/package.accept_keywords
+```
 
 # Setup
 
