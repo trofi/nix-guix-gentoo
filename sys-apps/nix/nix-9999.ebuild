@@ -56,6 +56,7 @@ DEPEND+="
 "
 
 PATCHES=(
+	"${FILESDIR}"/${PN}-2.6-libpaths.patch
 	"${FILESDIR}"/${PN}-2.6-inplace-nix.patch
 )
 
