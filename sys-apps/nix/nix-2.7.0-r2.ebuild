@@ -3,16 +3,15 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic git-r3 linux-info readme.gentoo-r1 user toolchain-funcs
+inherit autotools flag-o-matic linux-info readme.gentoo-r1 user toolchain-funcs
 
 DESCRIPTION="A purely functional package manager"
 HOMEPAGE="https://nixos.org/nix"
 
-#SRC_URI="http://nixos.org/releases/${PN}/${P}/${P}.tar.xz"
-EGIT_REPO_URI="https://github.com/NixOS/nix.git"
+SRC_URI="https://github.com/NixOS/nix/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
-#KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="+etc-profile +gc doc s3 +sodium"
 
 # sys-apps/busybox-nix-sandbox-shell is needed for sandbox mount of /bin/sh
