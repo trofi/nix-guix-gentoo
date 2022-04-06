@@ -70,7 +70,10 @@ RDEPEND="
 	dev-db/sqlite
 "
 
+# media-gfx/graphviz provides 'dot'. Not needed for
+# release tarballs.
 DEPEND="${RDEPEND}
+	media-gfx/graphviz
 "
 
 PATCHES=(
