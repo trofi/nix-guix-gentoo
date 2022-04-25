@@ -1,0 +1,19 @@
+# https://github.com/pkgcore/pkgcheck-action#example-workflows
+name: pkgcheck
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch: # allow manual trigger
+  schedule:
+    - cron: '0 0 * * *' # daily
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run pkgcheck
+      uses: pkgcore/pkgcheck-action@v1
