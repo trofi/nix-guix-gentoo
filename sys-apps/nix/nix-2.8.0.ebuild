@@ -118,7 +118,7 @@ src_configure() {
 	# - don't disable implicitly: https://github.com/trofi/nix-guix-gentoo/issues/12
 	export ac_cv_header_aws_s3_S3Client_h=$(usex s3)
 
-	econf \
+	CONFIG_SHELL="${BROOT}/bin/bash" econf \
 		--localstatedir="${EPREFIX}"/nix/var \
 		$(use_enable gc) \
 		--with-sandbox-shell="${EPREFIX}"/usr/bin/busybox-nix-sandbox-shell
