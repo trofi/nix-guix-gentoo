@@ -11,3 +11,12 @@ LICENSE="BSD-2"
 SLOT="0/15" # libcpuid.so.15
 
 KEYWORDS="~amd64 ~x86"
+
+src_install() {
+	default
+
+	# Ebuild does not install static libraries at least on linux.
+	# Even if it did -lcpuid has no dependencies.
+	# There is also a pkg-config file available in case it gets added.
+	rm "${ED}"/usr/$(get_libdir)/libcpuid.la || die
+}
