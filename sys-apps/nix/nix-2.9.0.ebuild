@@ -57,7 +57,7 @@ DEPEND+="
 PATCHES=(
 	"${FILESDIR}"/${PN}-2.6-libpaths.patch
 	"${FILESDIR}"/${PN}-2.9-inplace-nix.patch
-	"${FILESDIR}"/${PN}-2.7-lowdown.patch
+	"${FILESDIR}"/${PN}-2.9-lowdown.patch
 )
 
 DISABLE_AUTOFORMATTING=yes

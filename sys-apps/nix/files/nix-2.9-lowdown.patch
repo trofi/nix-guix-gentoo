@@ -1,0 +1,39 @@
+From 5bc522f769c8c4be9052bf14e92b7535a60aed9b Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Thu, 10 Mar 2022 23:16:27 +0000
+Subject: [PATCH] src/nix/local.mk: use LOWDOWN_LIBS for nix as well
+
+---
+ src/libcmd/local.mk | 2 +-
+ src/nix/local.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/libcmd/local.mk b/src/libcmd/local.mk
+index 3a4de6bcb..152bc388d 100644
+--- a/src/libcmd/local.mk
++++ b/src/libcmd/local.mk
+@@ -8,7 +8,7 @@ libcmd_SOURCES := $(wildcard $(d)/*.cc)
+ 
+ libcmd_CXXFLAGS += -I src/libutil -I src/libstore -I src/libexpr -I src/libmain -I src/libfetchers -I src/nix
+ 
+-libcmd_LDFLAGS = $(EDITLINE_LIBS) -llowdown -pthread
++libcmd_LDFLAGS = $(EDITLINE_LIBS) $(LOWDOWN_LIBS) -pthread
+ 
+ libcmd_LIBS = libstore libutil libexpr libmain libfetchers
+ 
+diff --git a/src/nix/local.mk b/src/nix/local.mk
+index e4ec7634d..0f2f016ec 100644
+--- a/src/nix/local.mk
++++ b/src/nix/local.mk
+@@ -18,7 +18,7 @@ nix_CXXFLAGS += -I src/libutil -I src/libstore -I src/libfetchers -I src/libexpr
+ 
+ nix_LIBS = libexpr libmain libfetchers libstore libutil libcmd
+ 
+-nix_LDFLAGS = -pthread $(SODIUM_LIBS) $(EDITLINE_LIBS) $(BOOST_LDFLAGS) -llowdown
++nix_LDFLAGS = -pthread $(SODIUM_LIBS) $(EDITLINE_LIBS) $(BOOST_LDFLAGS) $(LOWDOWN_LIBS)
+ 
+ $(foreach name, \
+   nix-build nix-channel nix-collect-garbage nix-copy-closure nix-daemon nix-env nix-hash nix-instantiate nix-prefetch-url nix-shell nix-store, \
+-- 
+2.36.0
+
