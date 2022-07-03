@@ -36,7 +36,7 @@ RDEPEND="
 		dev-libs/libxslt
 		app-text/docbook-xsl-stylesheets
 	)
-	s3? ( dev-libs/aws-sdk-cpp[-custom-memory-management,s3] )
+	s3? ( dev-libs/aws-sdk-cpp[-custom-memory-management(+),s3] )
 	sodium? ( dev-libs/libsodium:0= )
 "
 DEPEND="${RDEPEND}
