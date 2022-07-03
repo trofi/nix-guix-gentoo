@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic linux-info readme.gentoo-r1 user toolchain-funcs
+inherit autotools linux-info readme.gentoo-r1 user toolchain-funcs
 
 DESCRIPTION="A purely functional package manager"
 HOMEPAGE="https://nixos.org/nix"
