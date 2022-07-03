@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs
+inherit toolchain-funcs
 
 DESCRIPTION="static busybox for sys-apps/nix sandbox needs"
 HOMEPAGE="https://www.busybox.net/"
