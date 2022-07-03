@@ -27,7 +27,7 @@ KEYWORDS="~amd64 ~x86"
 # This is known to break liblowdown.a when it's built with -flto:
 #   https://github.com/trofi/nix-guix-gentoo/issues/19
 # Chances are it's a toolchain bug (or a limitation of LTO):
-#   https://gcc.gnu.org/PR105877 
+#   https://gcc.gnu.org/PR105877
 RESTRICT=strip
 
 DEPEND="
