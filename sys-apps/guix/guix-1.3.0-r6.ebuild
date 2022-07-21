@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit autotools git-r3 linux-info readme.gentoo-r1 systemd
+inherit autotools linux-info readme.gentoo-r1 systemd
 
 DESCRIPTION="GNU package manager (nix sibling)"
 HOMEPAGE="https://www.gnu.org/software/guix/"
@@ -41,12 +41,12 @@ copy_boot_guile_binaries() {
 	done
 }
 
-SRC_URI="$(binary_src_uris)"
-EGIT_REPO_URI="https://git.savannah.gnu.org/git/guix.git"
+SRC_URI="mirror://gnu/${PN}/${P}.tar.gz
+	$(binary_src_uris)"
 
 LICENSE="GPL-3"
 SLOT="0"
-#KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RESTRICT=test # complains about size of config.log and refuses to start tests
@@ -78,14 +78,11 @@ for i in {1..64}; do
 		>=acct-user/guixbuilder${i}-1
 	"
 done
-# media-gfx/graphviz provides 'dot'. Not needed for
-# release tarballs.
-DEPEND="${RDEPEND}
-	media-gfx/graphviz
-"
+
+DEPEND="${RDEPEND}"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-9999-default-daemon.patch
+	"${FILESDIR}"/${PN}-0.16.0-default-daemon.patch
 	"${FILESDIR}"/${PN}-1.3.0-compression-error.patch
 )
 
@@ -125,9 +122,6 @@ src_prepare() {
 	copy_boot_guile_binaries
 
 	default
-
-	./bootstrap || die
-
 	# build system is very eager to run automake itself: bug #625166
 	eautoreconf
 
