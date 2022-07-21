@@ -12,7 +12,7 @@ for i in {1..64}; do
 	d=acct-user/nixbld${i}
 	mkdir "${d}"
 
-cat > ${d}/nixbld${i}-0.ebuild <<EOF
+cat > ${d}/nixbld${i}-1.ebuild <<EOF
 # Copyright $(date +%Y) Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
@@ -23,7 +23,10 @@ EAPI=8
 inherit acct-user
 DESCRIPTION="Builder user for nix-daemon from sys-apps/nix"
 ACCT_USER_ID=$((30000 + $i))
-ACCT_USER_GROUPS=( nixbld )
+# We list 'nixbld' twice to both assign:
+# - primary group for user
+# - add user to /etc/group
+ACCT_USER_GROUPS=( nixbld nixbld )
 acct-user_add_deps
 EOF
 
@@ -42,7 +45,7 @@ EOF
 	d=acct-user/guixbuilder${i}
 	mkdir "${d}"
 
-cat > ${d}/guixbuilder${i}-0.ebuild <<EOF
+cat > ${d}/guixbuilder${i}-1.ebuild <<EOF
 # Copyright $(date +%Y) Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
@@ -53,7 +56,10 @@ EAPI=8
 inherit acct-user
 DESCRIPTION="Builder user for guix-daemon from sys-apps/guix"
 ACCT_USER_ID=$((31000 + $i))
-ACCT_USER_GROUPS=( guixbuild kvm )
+# We list 'nixbld' twice to both assign:
+# - primary group for user
+# - add user to /etc/group
+ACCT_USER_GROUPS=( guixbuild guixbuild kvm )
 acct-user_add_deps
 EOF
 
