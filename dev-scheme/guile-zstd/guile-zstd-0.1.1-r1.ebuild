@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools
 
@@ -28,6 +28,17 @@ S=${WORKDIR}/guile-zstd
 
 src_prepare() {
 	default
+
+	# Workaround gentoo-specific deviation where
+	# /usr/lib64/libzstd.so is a linker script that points to:
+	#   GROUP ( /lib64/libzstd.so.1 )
+	# This confuses guile-zstd and fails to open the library:
+	#   substitute: ice-9/boot-9.scm:1685:16: In procedure raise-exception:
+	#   substitute: In procedure load-foreign-library: file: "/usr/lib64/libzstd.so.1",
+	#     message: "file not found"
+	#   guix environment: error: `/usr/bin/guix substitute' died unexpectedly
+	sed -i -e "s,@ZSTD_LIBDIR@/libzstd.so.1,${EPREFIX}/$(get_libdir)/libzstd.so.1," \
+		zstd/config.scm.in || die
 
 	eautoreconf
 }
