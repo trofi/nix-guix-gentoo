@@ -1,0 +1,13 @@
+Sometimes CFLAGS exceed 1K and fail the parse:
+  https://github.com/trofi/nix-guix-gentoo/issues/22
+--- busybox-1.35.0.orig/scripts/kconfig/confdata.c	2021-12-26 16:53:21.000000000 +0000
++++ busybox-1.35.0/scripts/kconfig/confdata.c	2022-10-06 18:48:01.374687000 +0100
+@@ -87,7 +87,7 @@
+ int conf_read_simple(const char *name)
+ {
+ 	FILE *in = NULL;
+-	char line[1024];
++	char line[64 * 1024];
+ 	char *p, *p2;
+ 	struct symbol *sym;
+ 	int i;
