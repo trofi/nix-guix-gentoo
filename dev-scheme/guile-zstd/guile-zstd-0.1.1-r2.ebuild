@@ -14,9 +14,10 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
+# In zstd-1.5.2-r2 library was moved from /usr/lib to /lib
 RDEPEND="
 	>=dev-scheme/guile-2.0.0:=
-	app-arch/zstd:0=
+	>=app-arch/zstd-1.5.2-r2:0=
 "
 DEPEND="${RDEPEND}"
 
