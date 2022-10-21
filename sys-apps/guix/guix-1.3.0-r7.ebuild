@@ -53,7 +53,7 @@ RESTRICT=test # complains about size of config.log and refuses to start tests
 
 RDEPEND="
 	dev-libs/libgcrypt:0=
-	>=dev-scheme/guile-2.2:=[regex,networking,threads]
+	>=dev-scheme/guile-3:=[regex,networking,threads]
 	dev-scheme/bytestructures
 	dev-scheme/guile-gcrypt
 	>=dev-scheme/guile-git-0.2.0
