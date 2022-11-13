@@ -470,4 +470,7 @@
 			architecture.
 		</flag>
 	</use>
+	<upstream>
+		<remote-id type="github">aws/aws-sdk-cpp</remote-id>
+	</upstream>
 </pkgmetadata>

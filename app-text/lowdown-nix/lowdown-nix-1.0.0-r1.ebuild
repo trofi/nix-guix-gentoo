@@ -41,7 +41,7 @@ S="${WORKDIR}/lowdown-${MY_PV}"
 src_configure() {
 	CC="$(tc-getCC)" \
 		./configure \
-			PREFIX=${EPREFIX}/usr/$(get_libdir)/lowdown-nix \
+			PREFIX="${EPREFIX}"/usr/$(get_libdir)/lowdown-nix \
 			|| die "./configure failed"
 }
 

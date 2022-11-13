@@ -11,4 +11,7 @@
 		<flag name="s3">Enable Amazon S3 bucket to load and store packages (use <pkg>dev-libs/aws-sdk-cpp</pkg>).</flag>
 		<flag name="sodium">Use <pkg>dev-libs/libsodium</pkg> for cryptography</flag>
 	</use>
+	<upstream>
+		<remote-id type="github">NixOS/nix</remote-id>
+	</upstream>
 </pkgmetadata>
