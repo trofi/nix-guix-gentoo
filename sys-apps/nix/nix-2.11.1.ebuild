@@ -11,7 +11,7 @@ HOMEPAGE="https://nixos.org/nix"
 SRC_URI="https://github.com/NixOS/nix/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
 IUSE="+etc-profile +gc doc s3 +sodium"
 
 # sys-apps/busybox-nix-sandbox-shell is needed for sandbox mount of /bin/sh
