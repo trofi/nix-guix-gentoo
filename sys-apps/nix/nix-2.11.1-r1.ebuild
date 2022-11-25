@@ -12,7 +12,7 @@ SRC_URI="https://github.com/NixOS/nix/archive/refs/tags/${PV}.tar.gz -> ${P}.tar
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+etc-profile +gc doc s3 +sodium"
+IUSE="+etc-profile +gc doc +sodium"
 
 # sys-apps/busybox-nix-sandbox-shell is needed for sandbox mount of /bin/sh
 RDEPEND="
@@ -36,7 +36,6 @@ RDEPEND="
 		dev-libs/libxslt
 		app-text/docbook-xsl-stylesheets
 	)
-	s3? ( dev-libs/aws-sdk-cpp[-custom-memory-management(+),s3] )
 	sodium? ( dev-libs/libsodium:0= )
 "
 # add users and groups
@@ -112,11 +111,6 @@ src_prepare() {
 }
 
 src_configure() {
-	# Disable automagic depend:
-	# - don't enable implicitly: bug #670256
-	# - don't disable implicitly: https://github.com/trofi/nix-guix-gentoo/issues/12
-	export ac_cv_header_aws_s3_S3Client_h=$(usex s3)
-
 	CONFIG_SHELL="${BROOT}/bin/bash" econf \
 		--localstatedir="${EPREFIX}"/nix/var \
 		$(use_enable gc) \

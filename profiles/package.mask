@@ -3,4 +3,3 @@
 # rely on guile-3's functionality. You will need to unmask
 # all of them via /etc/portage/package.unmask
 >=sys-apps/guix-1.3.0
-
