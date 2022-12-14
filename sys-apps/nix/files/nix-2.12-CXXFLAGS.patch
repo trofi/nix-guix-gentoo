@@ -1,0 +1,19 @@
+From f55035000eb8a7238d15c1c9e115da540ba37ba6 Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Wed, 14 Dec 2022 22:23:58 +0000
+Subject: [PATCH] configure.ac: don't clobber CFLAGS=/CXXFLAGS= and allow users
+ to pass in custome flags
+
+Reported-by: 0n-s
+Bug: https://github.com/trofi/nix-guix-gentoo/issues/26
+--- a/configure.ac
++++ b/configure.ac
+@@ -41,8 +41,6 @@ AC_DEFINE_UNQUOTED(SYSTEM, ["$system"], [platform identifier ('cpu-os')])
+ test "$localstatedir" = '${prefix}/var' && localstatedir=/nix/var
+ 
+ 
+-CFLAGS=
+-CXXFLAGS=
+ AC_PROG_CC
+ AC_PROG_CXX
+ AC_PROG_CPP
