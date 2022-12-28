@@ -117,3 +117,86 @@ Next steps to try `guix` in action:
 
 - <http://trofi.github.io/posts/197-guix-on-gentoo-howto.html>
 - <https://guix.gnu.org/manual/>
+
+# Known problems and workarounds
+
+## Environment variables breaking emerge
+
+### The symptom
+
+```
+/usr/sbin/gtk-encode-symbolic-svg: symbol lookup error: /guix/...-glibc-2.33/lib/libpthread.so.0:
+  undefined symbol: __libc_pthread_init, version GLIBC_PRIVATE
+```
+
+This usually means your current environment contains unhandled
+variables. You can look at `env` output to find which ones mention
+`/nix/*` or `/gnu/*` store paths. Those are primary suspects.
+
+### The workaround
+
+Local workaround is to list the problematic variables in
+`/etc/portage/make.conf`:
+
+```
+# /etc/portage/make.conf
+# GDK_PIXBUF_MODULE_FILE can be removed once fix lands in ::gentoo:
+#     https://bugs.gentoo.org/887253
+ENV_UNSET="${ENV_UNSET} GDK_PIXBUF_MODULE_FILE"
+```
+
+### Longer term fix
+
+Longer term those should be fixed in `::gentoo`. Pending fixes:
+
+- `GDK_PIXBUF_MODULE_FILE`: <https://bugs.gentoo.org/887253>
+
+### Detailed description
+
+Some `nixpkgs` and `guix` packages set various environment variables to
+redirect library loading from a default location to version-specific
+directory. Usually it is done via scripts wrapping binaries. For example
+`firefox` is a shell script that sets `LD_LIBRARY_PATH`, `XDG_DATA_DIRS`,
+`GIO_EXTRA_MODULES`, `PATH` and then calls `.firefox-wrapped` `ELF`
+executable.
+
+Wrappers like that are usually contained to the wrapped program and
+don't normally cause problems to other packages. Unless such packages
+are able to spawn shells on their own. For example `konsole` exports
+`QT_PLUGIN_PATH` in it's wrapper. Another typical example is `PATH`
+variable.
+
+The problem is not specific to `nixpkgs` or `guix`. Those are just most
+extensive environment variable users with many parallel incompatible
+environments available.
+
+Normally `emerge` filters out problematic user variables by using
+profiles' defaults specificed in `ENV_UNSET` in `::gentoo` repository.
+For example it's current value is:
+
+```
+gentoo $ git grep ENV_UNSET | tr ' ' $'\n'
+
+profiles/base/make.defaults:ENV_UNSET="DBUS_SESSION_BUS_ADDRESS
+DISPLAY
+CARGO_HOME
+GDK_PIXBUF_MODULE_FILE
+XAUTHORITY
+XDG_CACHE_HOME
+XDG_CONFIG_HOME
+XDG_DATA_HOME
+XDG_STATE_HOME
+XDG_RUNTIME_DIR
+PERL_MM_OPT
+PERL5LIB
+PERL5OPT
+PERL_MB_OPT
+PERL_CORE
+PERLPREFIX
+GOBIN
+GOPATH"
+```
+
+Some (many!) variables are not yet filtered by it. They are either
+handled by `portage` explicitly (like `PATH` variables) or not handled
+at all.
