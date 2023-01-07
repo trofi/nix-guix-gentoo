@@ -1,13 +1,14 @@
 # Nix and Guix for Gentoo
 
-Gentoo overlay for Nix and Guix functional package managers.
+Gentoo overlay for [Nix](https://nixos.org/) and
+[GNU Guix](https://guix.gnu.org/) functional package managers.
 
 # Enabling the overlay
 
 First, let's enable the overlay. We can either use the
-eselect-repository method:
+`eselect-repository` method:
 
-```bash
+```sh
 # Install eselect-repository if you don't already have it
 emerge app-eselect/eselect-repository
 # Fetch and output the list of overlays
@@ -17,21 +18,21 @@ eselect repository enable nix-guix
 
 or we can use the layman method:
 
-```bash
+```sh
 # Add important USE flags for layman to your package.use directory:
 echo "app-portage/layman sync-plugin-portage git" >> /etc/portage/package.use/layman
 # Install layman if you don't already have it
 emerge app-portage/layman
 # Rebuild layman's repos.conf file:
 layman-updater -R
-# Add the Gentoo Haskell overlay:
+# Add the ::nix-guix overlay:
 layman -a nix-guix
 ```
 
 Finally, we need to unmask the overlay (this does not apply if your system
 is already running ~arch):
 
-```bash
+```sh
 # Unmask ~testing versions for your arch:
 echo "*/*::nix-guix" >> /etc/portage/package.accept_keywords
 ```
@@ -43,9 +44,9 @@ echo "*/*::nix-guix" >> /etc/portage/package.accept_keywords
 ### Installation
 
 The installation follows typical process of installing a
-daemon in gentoo:
+daemon in `gentoo`:
 
-```bash
+```sh
 emerge nix
 # on system systems:
 systemctl enable nix-daemon && systemctl start nix-daemon
@@ -53,7 +54,7 @@ systemctl enable nix-daemon && systemctl start nix-daemon
 rc-update add nix-daemon && /etc/init.d/nix-daemon start
 ```
 
-Then relogin as your user to import profile variables and
+Then relogin as your user to import `profile` variables and
 pull in package definitions:
 
 ```
@@ -71,9 +72,9 @@ Next steps to try `nix` in action:
 ### Installation
 
 The installation follows typical process of installing a
-daemon in gentoo:
+daemon in `gentoo`:
 
-```bash
+```sh
 emerge guix
 # on system systems:
 systemctl enable guix-daemon && systemctl start guix-daemon
@@ -83,13 +84,13 @@ rc-update add guix-daemon && /etc/init.d/guix-daemon start
 
 ### First run
 
-Upon first package installation Guix will create `~/.guix-profile` symlink to
+Upon first package installation `Guix` will create `~/.guix-profile` symlink to
 `/var/guix/profiles/per-user/${USER}` (where `${USER}` is your user account
 name in current shell).
 
-In order to allow Guix to set all variables correctly execute those commands:
+In order to allow `Guix` to set all variables correctly execute those commands:
 
-```bash
+```sh
 export GUIX_PROFILE="${HOME}/.guix-profile"
 export GUIX_LOCPATH="${GUIX_PROFILE}/lib/locale"
 source "${GUIX_PROFILE}/etc/profile"
@@ -100,7 +101,7 @@ The best way is to add the commands to your `${SHELL}` profile file:
 
 To install a `GNU hello` package to test out Guix execute:
 
-```bash
+```sh
 guix package -i hello
 ```
 
@@ -108,7 +109,7 @@ If you plan to use `guix pull` (and you probably are) you'll need to add
 it's `PATH` to your shell as well by following `guix pull`'s
 [suggestion](https://guix.gnu.org/manual/en/html_node/Invoking-guix-pull.html):
 
-```bash
+```sh
 export PATH="$HOME/.config/guix/current/bin:$PATH"
 export INFOPATH="$HOME/.config/guix/current/share/info:$INFOPATH"
 ```
@@ -119,6 +120,11 @@ Next steps to try `guix` in action:
 - <https://guix.gnu.org/manual/>
 
 # Known problems and workarounds
+
+Ideally the above setup from Just Work. In practice sometimes bugs
+happen outside `nix` or `guix` environments. When they come up and
+are not yet fixed upstream we will list them here with possible
+workarounds.
 
 ## Environment variables breaking emerge
 
@@ -133,23 +139,39 @@ This usually means your current environment contains unhandled
 variables. You can look at `env` output to find which ones mention
 `/nix/*` or `/gnu/*` store paths. Those are primary suspects.
 
+Known problematic variables:
+
+- none so far
+
+Past examples:
+
+- debugging poisoning by [GDK_PIXBUF_MODULE_FILE (fixed)](https://github.com/trofi/nix-guix-gentoo/issues/25)
+
 ### The workaround
 
-Local workaround is to list the problematic variables in
-`/etc/portage/make.conf`:
+Once you figured out what variable causes problems you can add it to the
+list of `ENV_UNSET` variables in `/etc/portage/make.conf`. For example
+if it was a `FOO_VARIABLE`:
 
 ```
 # /etc/portage/make.conf
-# GDK_PIXBUF_MODULE_FILE can be removed once fix lands in ::gentoo:
-#     https://bugs.gentoo.org/887253
-ENV_UNSET="${ENV_UNSET} GDK_PIXBUF_MODULE_FILE"
+#  can be removed once fix lands in ::gentoo:
+#     https://bugs.gentoo.org/...
+ENV_UNSET="${ENV_UNSET} FOO_VARIABLE"
 ```
 
 ### Longer term fix
 
-Longer term those should be fixed in `::gentoo`. Pending fixes:
+Longer term those variables should be reported in `::gentoo`. See
+`Past examples` below for possible reports and fixes.
 
-- `GDK_PIXBUF_MODULE_FILE`: <https://bugs.gentoo.org/887253>
+Pending fixes:
+
+- none so far.
+
+Past examples:
+
+- [GDK_PIXBUF_MODULE_FILE](https://bugs.gentoo.org/887253)
 
 ### Detailed description
 
