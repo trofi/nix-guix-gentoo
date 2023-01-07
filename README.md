@@ -121,7 +121,7 @@ Next steps to try `guix` in action:
 
 # Known problems and workarounds
 
-Ideally the above setup from Just Work. In practice sometimes bugs
+Ideally the above setup should Just Work. In practice sometimes bugs
 happen outside `nix` or `guix` environments. When they come up and
 are not yet fixed upstream we will list them here with possible
 workarounds.
