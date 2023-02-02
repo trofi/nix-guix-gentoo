@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit edo toolchain-funcs
 
 DESCRIPTION="static busybox for sys-apps/nix sandbox needs"
 HOMEPAGE="https://www.busybox.net/"
@@ -20,6 +20,13 @@ DEPEND=">=sys-kernel/linux-headers-2.6.39
 	virtual/libcrypt[static-libs]"
 RDEPEND=""
 
+# Work around the fact that clang profiles in ::gentoo provide
+# incomplite static linking environment. It probably should via
+# virtual/libc[static-libs].
+# TODO: remove when/if https://bugs.gentoo.org/892956 gets fixes
+IUSE+=" llvm-libunwind"
+DEPEND+=" llvm-libunwind? ( sys-libs/llvm-libunwind[static-libs] )"
+
 PATCHES=("${FILESDIR}"/busybox-1.35.0-longer-lines.patch)
 
 S=${WORKDIR}/${MY_P}
@@ -35,6 +42,34 @@ busybox_set_config() {
 
 _emake() {
 	emake HOSTCC="$(tc-getBUILD_CC)" CC="$(tc-getCC)" "$@"
+}
+
+src_prepare() {
+	default
+
+	if use llvm-libunwind; then
+		# Today's llvm's runtime library does not implement
+		# small subset of libgcc.a / libgcc_s.so for TF (long
+		# double) types.
+		# TODO: remove once implemented upstream (or when glibc
+		# knows how to avoid their use).
+		einfo "Checking for libc.a static linkage."
+		if ! $(tc-getCC) -static ${CFLAGS} ${LDFLAGS} "${FILESDIR}"/printf-probe.c -o "${T}"/printf-probe.elf; then
+			einfo "Enabling 'long double' TF hack."
+			mkdir "${T}"/tfhack || die
+
+			pushd "${T}"/tfhack || die
+			edo $(tc-getCC) -c -fPIC ${CFLAGS} "${FILESDIR}"/libgcc-TF-stubs.c -o libgcc-TF-stubs.o
+			edo $(tc-getAR) qc libtfhack.a libgcc-TF-stubs.o
+			edo $(tc-getRANLIB) libtfhack.a
+			popd
+
+			# TODO: it's not cross-compiler friendly.
+			LDFLAGS="${LDFLAGS} -L${T}/tfhack -ltfhack"
+			einfo "Mangle LDFLAGS: ${LDFLAGS}"
+		fi
+	fi
+
 }
 
 src_configure() {
