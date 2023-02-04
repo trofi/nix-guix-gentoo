@@ -1,7 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools linux-info readme.gentoo-r1 systemd
 
@@ -145,11 +145,6 @@ src_configure() {
 	# to be compatible with guix from /gnu/store
 	econf \
 		--localstatedir="${EPREFIX}"/var
-}
-
-src_compile() {
-	# guile occasionally fails with 'bad address'
-	emake -j1
 }
 
 src_install() {
