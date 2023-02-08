@@ -251,7 +251,7 @@ src_prepare() {
 	default
 	# Workaround toolchain mix in use of -flto flags:
 	#   https://github.com/trofi/nix-guix-gentoo/issues/29
-	# TODO(trofi): file a bug against cargo.eclass.
-	# There are likely many example of such a breakage.
+	# TODO(trofi): drop the workaround once the ::gentoo bug is
+	# fixed: https://bugs.gentoo.org/893658
 	filter-lto
 }
