@@ -222,7 +222,7 @@ CRATES="
 	zip-0.5.13
 "
 
-inherit cargo
+inherit cargo flag-o-matic
 
 DESCRIPTION="A backend for 'mdbook' which will check your links for you."
 # Double check the homepage as the cargo_metadata crate
@@ -246,3 +246,12 @@ BDEPEND=""
 # rust does not use *FLAGS from make.conf, silence portage warning
 # update with proper path to binaries this crate installs, omit leading /
 QA_FLAGS_IGNORED="usr/bin/${PN}"
+
+src_prepare() {
+	default
+	# Workaround toolchain mix in use of -flto flags:
+	#   https://github.com/trofi/nix-guix-gentoo/issues/29
+	# TODO(trofi): file a bug against cargo.eclass.
+	# There are likely many example of such a breakage.
+	filter-lto
+}
