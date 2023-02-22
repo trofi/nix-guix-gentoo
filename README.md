@@ -48,7 +48,7 @@ daemon in `gentoo`:
 
 ```sh
 emerge nix
-# on system systems:
+# on systemd systems:
 systemctl enable nix-daemon && systemctl start nix-daemon
 # on openrc systems:
 rc-update add nix-daemon && /etc/init.d/nix-daemon start
@@ -76,7 +76,7 @@ daemon in `gentoo`:
 
 ```sh
 emerge guix
-# on system systems:
+# on systemd systems:
 systemctl enable guix-daemon && systemctl start guix-daemon
 # on openrc systems:
 rc-update add guix-daemon && /etc/init.d/guix-daemon start
