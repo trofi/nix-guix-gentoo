@@ -193,7 +193,7 @@ extensive environment variable users with many parallel incompatible
 environments available.
 
 Normally `emerge` filters out problematic user variables by using
-profiles' defaults specificed in `ENV_UNSET` in `::gentoo` repository.
+profiles' defaults specified in `ENV_UNSET` in `::gentoo` repository.
 For example it's current value is:
 
 ```
@@ -222,3 +222,60 @@ GOPATH"
 Some (many!) variables are not yet filtered by it. They are either
 handled by `portage` explicitly (like `PATH` variables) or not handled
 at all.
+
+# Why use this overlay? Why not use official installation instructions?
+
+That's a great question!
+
+Here are installation instructions for:
+
+- `nix`
+  * [one liner](https://nixos.org/download.html)
+  * [step by step](https://nixos.org/manual/nix/stable/installation/multi-user.html)
+- `guix`
+  * [one liner and step by step](https://guix.gnu.org/manual/en/html_node/Binary-Installation.html)
+
+Why not just run those?
+
+The aspirational goal of this overlay is to make both `nix` and `guix`
+closer to typical packages one normally installs with `emerge`:
+installation, upgrade and uninstall should not require extra actions or
+special cleanups.
+
+I'll list of some individual aspects below with their pros and cons to
+give the reader to decide on their own:
+
+## Install, Upgrade and Uninstall
+
+Ebuild pros:
+
+- install, upgrade and uninstall are done just like any other package
+  via `emerge` (and via service registration). No need to update
+  `nix-daemon` via `nix` package mechanism. Daemon just works.
+- no need to manage separate `root`-based `nix` package just to update
+  `nix-daemon`. Managing user's configurations is enough.
+- rollbacks are done by emerging previous package version
+- the binaries are built from source package using user's `USE`,
+  `CFLAGS` and libraries. That makes `nix` and `guix` more adaptable to
+  the environments where official binaries don't work as is.
+- needed users and groups are installed and uninstalled along with the
+  package. Adding extra groups to builders (like `kvm`) can be done via
+  `make.conf` overrides with all power of `man acct-user.eclass`.
+- the `nix` and `guix` binaries are installed to their usual `/usr`
+  locations (`nixpkgs` packages still use `nix` as expected).
+- all created files and directories are tracked by package manager,
+  allow for natural cleanup on uninstall (apart from `/nix/`).
+- ebuild does a bit of environment validation to make sure host kernel
+  supports enough features to run nix build containers.
+
+Ebuild cons:
+
+- ebuild retraces the steps of the official install script: it very
+  occasionally gets them wrong (usually on major updates). That might
+  cause overlay-specific bugs.
+- the binaries are built from source package using user's `USE`,
+  `CFLAGS` and libraries (same as cons): feature set (and bug set) might
+  be different from official upstream binary.
+- by default `nix-daemon` version is defined by the ebuild, not by the
+  package version installed via `nix`. It should not be an issue, but
+  it's a deviation from typical setup.
