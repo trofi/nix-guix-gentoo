@@ -49,7 +49,7 @@ src_prepare() {
 		# knows how to avoid their use).
 		einfo "Checking for libc.a static linkage."
 		if ! $(tc-getCC) -static ${CFLAGS} ${LDFLAGS} "${FILESDIR}"/printf-probe.c -o "${T}"/printf-probe.elf; then
-			einfo "Enabling 'long double' TF hack."
+			einfo "Enabling 'long double' TF hack (https://bugs.gentoo.org/899582)"
 			mkdir "${T}"/tfhack || die
 
 			pushd "${T}"/tfhack || die
