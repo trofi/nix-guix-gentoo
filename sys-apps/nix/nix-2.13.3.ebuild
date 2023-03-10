@@ -24,7 +24,7 @@ RDEPEND="
 	dev-cpp/gtest
 	dev-db/sqlite
 	dev-libs/editline:0=
-	dev-libs/libcpuid:0=
+	amd64? ( dev-libs/libcpuid:0= )
 	dev-libs/openssl:0=
 	>=dev-libs/boost-1.66:0=[context]
 	net-misc/curl
