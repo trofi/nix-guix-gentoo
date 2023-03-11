@@ -64,7 +64,7 @@ RDEPEND="
 	dev-scheme/guile-ssh
 	dev-scheme/guile-zstd
 	>=dev-scheme/guile-zlib-0.1.0
-	net-libs/gnutls[guile]
+	|| ( dev-scheme/guile-gnutls net-libs/gnutls[guile] )
 	sys-libs/zlib
 	app-arch/bzip2
 	dev-db/sqlite
