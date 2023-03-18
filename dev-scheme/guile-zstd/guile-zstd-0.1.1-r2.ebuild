@@ -23,7 +23,7 @@ DEPEND="${RDEPEND}"
 
 # guile generates ELF files without use of C or machine code
 # It's a portage's false positive. bug #677600
-QA_FLAGS_IGNORED='.*[.]go'
+QA_PREBUILT='*[.]go'
 
 S=${WORKDIR}/guile-zstd
 
