@@ -93,7 +93,7 @@ QA_PREBUILT="usr/share/guile/site/*/gnu/packages/bootstrap/*"
 
 # guile generates ELF files without use of C or machine code
 # It's a portage's false positive. bug #677600
-QA_FLAGS_IGNORED='.*[.]go'
+QA_PREBUILT+=' *[.]go'
 
 DISABLE_AUTOFORMATTING=yes
 DOC_CONTENTS="Quick start user guide on Gentoo:
