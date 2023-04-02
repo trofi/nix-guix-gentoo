@@ -14,6 +14,7 @@ emerge app-eselect/eselect-repository
 # Fetch and output the list of overlays
 eselect repository list
 eselect repository enable nix-guix
+emaint sync -r nix-guix
 ```
 
 or we can use the layman method:
