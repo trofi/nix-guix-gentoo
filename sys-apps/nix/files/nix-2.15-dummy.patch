@@ -1,0 +1,31 @@
+From c6f7481a0f9c9dfe4bc9a3b37e13c8415db71c0d Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Tue, 11 Apr 2023 22:49:14 +0100
+Subject: [PATCH] doc/manual/local.mk: prefix /dummy with temp dir
+
+---
+ doc/manual/local.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/doc/manual/local.mk b/doc/manual/local.mk
+index b64561097..f999050fd 100644
+--- a/doc/manual/local.mk
++++ b/doc/manual/local.mk
+@@ -26,10 +26,10 @@ clean-files += $(d)/*.1 $(d)/*.5 $(d)/*.8
+ # Set cores to 0 because otherwise nix show-config resolves the cores based on the current machine
+ dummy-env = env -i \
+ 	LD_LIBRARY_PATH=$(DESTDIR)$(libdir) \
+-	HOME=/dummy \
+-	NIX_CONF_DIR=/dummy \
+-	NIX_SSL_CERT_FILE=/dummy/no-ca-bundle.crt \
+-	NIX_STATE_DIR=/dummy \
++	HOME=$(T)/dummy \
++	NIX_CONF_DIR=$(T)/dummy \
++	NIX_SSL_CERT_FILE=$(T)/dummy/no-ca-bundle.crt \
++	NIX_STATE_DIR=$(T)/dummy \
+ 	NIX_CONFIG='cores = 0'
+ 
+ nix-eval = $(dummy-env) $(DESTDIR)$(bindir)/nix eval --experimental-features nix-command -I nix/corepkgs=corepkgs --store dummy:// --impure --raw
+-- 
+2.39.2
+
