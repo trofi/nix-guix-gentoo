@@ -9,12 +9,16 @@ Use standard [repos.conf](https://wiki.gentoo.org/wiki//etc/portage/repos.conf)
 configuration for the overlay:
 
 ```bash
+# Add an entry
 cat > nix-guix.conf <<EOF
 [nix-guix]
 location = /var/db/repos/nix-guix
 sync-type = git
 sync-uri = https://github.com/trofi/nix-guix-gentoo.git
 EOF
+
+# Sync the overlay
+emerge --sync
 ```
 
 Finally, we need to unmask the overlay (this does not apply if your system
