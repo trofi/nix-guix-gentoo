@@ -67,7 +67,6 @@ DEPEND+="
 PATCHES=(
 	"${FILESDIR}"/${PN}-2.10-libpaths.patch
 	"${FILESDIR}"/${PN}-2.15-DESTDIR.patch
-	"${FILESDIR}"/${PN}-2.15-dummy.patch
 )
 
 DISABLE_AUTOFORMATTING=yes

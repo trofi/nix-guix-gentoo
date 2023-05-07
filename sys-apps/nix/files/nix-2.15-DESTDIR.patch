@@ -1,25 +1,29 @@
-From 2b962dec1e8cad8205f31bf2c675a21c16e69199 Mon Sep 17 00:00:00 2001
+From ccfff0fa78975ba8dce19919474d3599e4112e05 Mon Sep 17 00:00:00 2001
 From: Sergei Trofimovich <slyich@gmail.com>
 Date: Thu, 10 Feb 2022 21:56:03 +0000
 Subject: [PATCH] Add basic DESTDIR= support
 
 ---
- doc/manual/local.mk | 39 ++++++++++++++++++++-------------------
- 1 file changed, 20 insertions(+), 19 deletions(-)
+ doc/manual/local.mk | 45 +++++++++++++++++++++++----------------------
+ 1 file changed, 23 insertions(+), 22 deletions(-)
 
 diff --git a/doc/manual/local.mk b/doc/manual/local.mk
-index 63e7e61e4..b64561097 100644
+index 63e7e61e4..1f9e59034 100644
 --- a/doc/manual/local.mk
 +++ b/doc/manual/local.mk
 @@ -25,13 +25,14 @@ clean-files += $(d)/*.1 $(d)/*.5 $(d)/*.8
  # Provide a dummy environment for nix, so that it will not access files outside the macOS sandbox.
  # Set cores to 0 because otherwise nix show-config resolves the cores based on the current machine
  dummy-env = env -i \
+-	HOME=/dummy \
+-	NIX_CONF_DIR=/dummy \
+-	NIX_SSL_CERT_FILE=/dummy/no-ca-bundle.crt \
+-	NIX_STATE_DIR=/dummy \
 +	LD_LIBRARY_PATH=$(DESTDIR)$(libdir) \
- 	HOME=/dummy \
- 	NIX_CONF_DIR=/dummy \
- 	NIX_SSL_CERT_FILE=/dummy/no-ca-bundle.crt \
- 	NIX_STATE_DIR=/dummy \
++	HOME=$(T)/dummy \
++	NIX_CONF_DIR=$(T)/dummy \
++	NIX_SSL_CERT_FILE=$(T)/dummy/no-ca-bundle.crt \
++	NIX_STATE_DIR=$(T)/dummy \
  	NIX_CONFIG='cores = 0'
  
 -nix-eval = $(dummy-env) $(bindir)/nix eval --experimental-features nix-command -I nix/corepkgs=corepkgs --store dummy:// --impure --raw
@@ -27,7 +31,13 @@ index 63e7e61e4..b64561097 100644
  
  # re-implement mdBook's include directive to make it usable for terminal output and for proper @docroot@ substitution
  define process-includes
-@@ -94,61 +95,61 @@ $(d)/src/command-ref/new-cli: $(d)/nix.json $(d)/utils.nix $(d)/generate-manpage
+@@ -89,52 +90,52 @@ $(d)/src/SUMMARY.md: $(d)/src/SUMMARY.md.in $(d)/src/command-ref/new-cli $(d)/sr
+ 	@cp $< $@
+ 	@$(call process-includes,$@,$@)
+ 
+-$(d)/src/command-ref/new-cli: $(d)/nix.json $(d)/utils.nix $(d)/generate-manpage.nix $(bindir)/nix
++$(d)/src/command-ref/new-cli: $(d)/nix.json $(d)/utils.nix $(d)/generate-manpage.nix $(DESTDIR)$(bindir)/nix
+ 	@rm -rf $@ $@.tmp
  	$(trace-gen) $(nix-eval) --write-to $@.tmp --expr 'import doc/manual/generate-manpage.nix (builtins.readFile $<)'
  	@mv $@.tmp $@
  
@@ -88,16 +98,8 @@ index 63e7e61e4..b64561097 100644
 +install: $(DESTDIR)$(docdir)/manual/index.html
  
  # Generate 'nix' manpages.
--install: $(mandir)/man1/nix3-manpages
-+install: $(mandir)/man1/nix3-manpages
- man: doc/manual/generated/man1/nix3-manpages
- all: doc/manual/generated/man1/nix3-manpages
- 
- # FIXME: unify with how the other man pages are generated.
- # this one works differently and does not use any of the amenities provided by `/mk/lib.mk`.
--$(mandir)/man1/nix3-manpages: doc/manual/generated/man1/nix3-manpages
-+$(mandir)/man1/nix3-manpages: doc/manual/generated/man1/nix3-manpages
- 	@mkdir -p $(DESTDIR)$$(dirname $@)
+ install: $(mandir)/man1/nix3-manpages
+@@ -148,7 +149,7 @@ $(mandir)/man1/nix3-manpages: doc/manual/generated/man1/nix3-manpages
  	$(trace-install) install -m 0644 $$(dirname $<)/* $(DESTDIR)$$(dirname $@)
  
  doc/manual/generated/man1/nix3-manpages: $(d)/src/command-ref/new-cli
@@ -116,5 +118,5 @@ index 63e7e61e4..b64561097 100644
  		tmp="$$(mktemp -d)"; \
  		cp -r doc/manual "$$tmp"; \
 -- 
-2.39.2
+2.40.1
 
