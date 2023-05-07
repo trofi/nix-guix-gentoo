@@ -169,6 +169,10 @@ src_install() {
 	fperms 1777            /var/guix/profiles/per-user
 
 	newinitd "${FILESDIR}"/guix-daemon.initd guix-daemon
+
+	# Workaround llvm-strip problem of mangling guile ELF debug
+	# sections: https://bugs.gentoo.org/905898
+	dostrip -x "/usr/$(get_libdir)/guile"
 }
 
 pkg_postinst() {
