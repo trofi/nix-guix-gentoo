@@ -51,6 +51,7 @@ DEPEND="${RDEPEND}
 	app-text/mdbook
 	app-text/mdbook-linkcheck
 	dev-cpp/nlohmann_json
+	dev-cpp/rapidcheck
 	>=sys-devel/bison-2.6
 	>=sys-devel/flex-2.5.35
 "
@@ -65,7 +66,7 @@ DEPEND+="
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-2.10-libpaths.patch
-	"${FILESDIR}"/${PN}-2.13.3-DESTDIR.patch
+	"${FILESDIR}"/${PN}-2.15-DESTDIR.patch
 )
 
 DISABLE_AUTOFORMATTING=yes
@@ -108,6 +109,9 @@ src_prepare() {
 	# inject our copy of lowdown-nix
 	export PKG_CONFIG_PATH="${PKG_CONFIG_PATH}${PKG_CONFIG_PATH:+:}${EPREFIX}/usr/$(get_libdir)/lowdown-nix/lib/pkgconfig"
 	export PATH="$PATH:${EPREFIX}/usr/$(get_libdir)/lowdown-nix/bin"
+
+	# inject rapidcheck extra includes
+	export CXXFLAGS="${CXXFLAGS} -I${EPREFIX}/usr/include/rapidcheck/extras/gtest/include"
 }
 
 src_configure() {
