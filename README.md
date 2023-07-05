@@ -9,8 +9,11 @@ Use standard [repos.conf](https://wiki.gentoo.org/wiki//etc/portage/repos.conf)
 configuration for the overlay:
 
 ```bash
+# make sure 'repos.conf' is present:
+mkdir -p /etc/portage/repos.conf
+
 # Add an entry
-cat > nix-guix.conf <<EOF
+cat > /etc/portage/repos.conf/nix-guix.conf <<EOF
 [nix-guix]
 location = /var/db/repos/nix-guix
 sync-type = git
@@ -25,8 +28,17 @@ Finally, we need to unmask the overlay (this does not apply if your system
 is already running ~arch):
 
 ```sh
+# create keywords directory:
+mkdir -p /etc/portage/package.accept_keywords
+
 # Unmask ~testing versions for your arch:
-echo "*/*::nix-guix" >> /etc/portage/package.accept_keywords
+echo "*/*::nix-guix" >> /etc/portage/package.accept_keywords/nix-guix
+
+# (guix only) Unmask hard-masked guile and guix:
+mkdir -p /etc/portage/package.unmask
+echo "sys-apps/guix::nix-guix" >> /etc/portage/package.unmask/nix-guix
+echo "dev-scheme/guile"        >> /etc/portage/package.unmask/nix-guix
+echo "dev-scheme/guile"        >> /etc/portage/package.accept_keywords/nix-guix
 ```
 
 # Setup
@@ -54,6 +66,26 @@ nix-channel --add https://nixos.org/channels/nixpkgs-unstable
 nix-channel --update
 ```
 
+You are done!
+
+Now it's a good idea to check basic functionality:
+
+```
+# run a program without installation:
+nix-shell -p re2c --run "re2c --version"
+> re2c 3.0
+
+# install and run a program:
+nix-env -iA nixpkgs.re2c --no-sandbox
+> installing 're2c-3.0'
+
+re2c --version
+> re2c 3.0
+
+nix-env -e re2c
+> uninstalling 're2c-3.0'
+```
+
 Next steps to try `nix` in action:
 
 - <https://trofi.github.io/posts/196-nix-on-gentoo-howto.html>
@@ -63,8 +95,8 @@ Next steps to try `nix` in action:
 
 ### Installation
 
-The installation follows typical process of installing a
-daemon in `gentoo`:
+The installation follows typical process of installing a daemon in
+`gentoo`:
 
 ```sh
 emerge guix
