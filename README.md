@@ -150,6 +150,96 @@ happen outside `nix` or `guix` environments. When they come up and
 are not yet fixed upstream we will list them here with possible
 workarounds.
 
+## Missing sandbox support
+
+The typical symptom is a failure to set the sandbox up when the build is
+required. Example test at rebuilding the package:
+
+```
+# fetching from cache:
+$ nix-build --no-link '<nixpkgs>' -A hello
+...
+/nix/store/s66mzxpvicwk07gjbjfw9izjfa797vsw-hello-2.12.1
+
+$ nix-build --check --no-link '<nixpkgs>' -A hello
+error: this system does not support the kernel namespaces that are required for sandboxing; use '--no-sandbox' to disable sandboxing
+```
+
+Here `error: this system does not support the kernel namespaces that are
+required for sandboxing` is a symptom that your system fails to enable
+`chroot` sandbox that relies on kernel's `PID` and `USER` (mount)
+namespaces.
+
+THere are a few possible reasons for it:
+
+1. Missing namespace support in the kernel
+
+   Make sure you have those enabled:
+
+   ```
+   # zcat /proc/config.gz | grep -P 'CONFIG_USER_NS|PID_NS'
+   CONFIG_USER_NS=y
+   CONFIG_PID_NS=y
+   ```
+
+   Fix: build kernel with namespace support.
+
+2. Already present read-only mounts within `/proc`
+
+   These read-only entries are usually placed by by container managers
+   like `docker` and `systemd-nspawn`. Example entries:
+
+   ```
+   # mount | grep proc
+   proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+   proc on /proc/sys type proc (ro,nosuid,nodev,noexec,relatime)
+   proc on /proc/acpi type proc (ro,nosuid,nodev,noexec,relatime)
+   proc on /proc/asound type proc (ro,nosuid,nodev,noexec,relatime)
+   proc on /proc/bus type proc (ro,nosuid,nodev,noexec,relatime)
+   proc on /proc/fs type proc (ro,nosuid,nodev,noexec,relatime)
+   proc on /proc/irq type proc (ro,nosuid,nodev,noexec,relatime)
+   proc on /proc/scsi type proc (ro,nosuid,nodev,noexec,relatime)
+   tmpfs on /proc/sys/kernel/random/boot_id type tmpfs (ro,nosuid,nodev,noexec,size=26371500k,nr_inodes=819200,mode=755)
+   tmpfs on /proc/sys/kernel/random/boot_id type tmpfs (rw,nosuid,nodev,size=26371500k,nr_inodes=819200,mode=755)
+   tmpfs on /proc/kmsg type tmpfs (rw,nosuid,nodev,size=26371500k,nr_inodes=819200,mode=755)
+   ```
+
+   Multiple `ro` mounts under `/proc` are a problem here. You need to
+   find which mounts are causing the problem here. Some of them are safe
+   and some are interferring with `nix-daemon`'s `/proc` remount:
+
+   See [this post](https://lore.kernel.org/lkml/87tvsrjai0.fsf@xmission.com/T/)
+   for more details on why it fails.
+
+   Fix: TODO. Not sure what the correct fix here is yet. As a workaround
+   to make sure it's the `/proc` masking issue you can unmount all of
+   the `/proc` sub-mounts in the container:
+   ```
+   # umount /proc/kmsg /proc/scsi /proc/irq ...
+   ```
+   and restart `nix-daemon`.
+
+   Maybe `systemd`'s `ProtectKernelTunables=no` could help as a
+   workaround?
+
+   Healthy state should look like this:
+   ```
+   # mount | fgrep proc
+   proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+
+   $ nix-build --check --no-link '<nixpkgs>' -A hello
+   ...
+   checking outputs of '/nix/store/ib3sh3pcz10wsmavxvkdbayhqivbghlq-hello-2.12.1.drv'...
+   unpacking sources
+   ...
+   stripping (with command strip and flags -S -p) in  /nix/store/s66mzxpvicwk07gjbjfw9izjfa797vsw-hello-2.12.1/bin
+   /nix/store/s66mzxpvicwk07gjbjfw9izjfa797vsw-hello-2.12.1
+   ```
+
+If you absolutely must disable sandbox then you can set
+`sandbox-fallback = false` in `/etc/nix/nix.conf` and restart
+`nix-daemon`. But things will leak out and break. You have been warned.
+
 ## Environment variables breaking emerge
 
 ### The symptom
