@@ -247,11 +247,3 @@ BDEPEND=""
 # update with proper path to binaries this crate installs, omit leading /
 QA_FLAGS_IGNORED="usr/bin/${PN}"
 
-src_prepare() {
-	default
-	# Workaround toolchain mix in use of -flto flags:
-	#   https://github.com/trofi/nix-guix-gentoo/issues/29
-	# TODO(trofi): drop the workaround once the ::gentoo bug is
-	# fixed: https://bugs.gentoo.org/893658
-	filter-lto
-}
