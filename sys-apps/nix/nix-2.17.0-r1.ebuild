@@ -14,6 +14,11 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="+etc-profile +gc doc +sodium"
 
+BDEPEND="
+	doc? ( app-text/mdbook
+		app-text/mdbook-linkcheck
+	)
+"
 # sys-apps/busybox-nix-sandbox-shell is needed for sandbox mount of /bin/sh
 RDEPEND="
 	app-arch/brotli
@@ -48,8 +53,6 @@ for i in {1..64}; do
 	"
 done
 DEPEND="${RDEPEND}
-	app-text/mdbook
-	app-text/mdbook-linkcheck
 	dev-cpp/nlohmann_json
 	dev-cpp/rapidcheck
 	>=sys-devel/bison-2.6
@@ -121,6 +124,7 @@ src_configure() {
 	CONFIG_SHELL="${BROOT}/bin/bash" econf \
 		--localstatedir="${EPREFIX}"/nix/var \
 		$(use_enable gc) \
+		$(use_enable doc doc-gen) \
 		--with-sandbox-shell="${EPREFIX}"/usr/bin/busybox-nix-sandbox-shell
 
 	emake Makefile.config # gets generated late
