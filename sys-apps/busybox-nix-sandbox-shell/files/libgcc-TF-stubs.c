@@ -14,22 +14,7 @@ static void die(const char * func)
     exit(1);
 }
 
-int __unordtf2 (long double a, long double b)
-{
-    die(__func__);
-}
-
-int __letf2 (long double a, long double b)
-{
-    die(__func__);
-}
-
-long double __multf3 (long double a, long double b)
-{
-    die(__func__);
-}
-
-long double __addtf3 (long double a, long double b)
-{
-    die(__func__);
-}
+int         __unordtf2 (long double a, long double b) { die(__func__); }
+int         __letf2    (long double a, long double b) { die(__func__); }
+long double __multf3   (long double a, long double b) { die(__func__); }
+long double __addtf3   (long double a, long double b) { die(__func__); }
