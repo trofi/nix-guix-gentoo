@@ -1,5 +1,7 @@
 # Sergei Trofimovich <slyich@gmail.com> (2023-07-05)
-# guix needs guile-3 (still masked in ::gentoo). To unmask it use:
+# guix needs guile-3 (still masked in ::gentoo): https://bugs.gentoo.org/705554
+#
+# To unmask needed guile use:
 #
 #     # mkdir -p /etc/portage/package.unmask
 #     # echo "sys-apps/guix::nix-guix" >> /etc/portage/package.unmask/nix-guix
