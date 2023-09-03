@@ -170,7 +170,7 @@ required for sandboxing` is a symptom that your system fails to enable
 `chroot` sandbox that relies on kernel's `PID` and `USER` (mount)
 namespaces.
 
-THere are a few possible reasons for it:
+There are a few possible reasons for it:
 
 1. Missing namespace support in the kernel
 
@@ -182,7 +182,7 @@ THere are a few possible reasons for it:
    CONFIG_PID_NS=y
    ```
 
-   Fix: build kernel with namespace support.
+   Fix: build kernel with `USER_NS` and `PID_NS` support.
 
 2. Already present read-only mounts within `/proc`
 
@@ -206,7 +206,7 @@ THere are a few possible reasons for it:
 
    Multiple `ro` mounts under `/proc` are a problem here. You need to
    find which mounts are causing the problem here. Some of them are safe
-   and some are interferring with `nix-daemon`'s `/proc` remount:
+   and some are interfering with `nix-daemon`'s `/proc` remount:
 
    See [this post](https://lore.kernel.org/lkml/87tvsrjai0.fsf@xmission.com/T/)
    for more details on why it fails.
@@ -232,8 +232,8 @@ THere are a few possible reasons for it:
    checking outputs of '/nix/store/ib3sh3pcz10wsmavxvkdbayhqivbghlq-hello-2.12.1.drv'...
    unpacking sources
    ...
-   stripping (with command strip and flags -S -p) in  /nix/store/s66mzxpvicwk07gjbjfw9izjfa797vsw-hello-2.12.1/bin
-   /nix/store/s66mzxpvicwk07gjbjfw9izjfa797vsw-hello-2.12.1
+   stripping (with command strip and flags -S -p) in  /nix/store/...-hello-2.12.1/bin
+   /nix/store/...-hello-2.12.1
    ```
 
 If you absolutely must disable sandbox then you can set
@@ -311,7 +311,7 @@ profiles' defaults specified in `ENV_UNSET` in `::gentoo` repository.
 For example it's current value is:
 
 ```
-gentoo $ git grep ENV_UNSET | tr ' ' $'\n'
+gentoo.git $ git grep ENV_UNSET | tr ' ' $'\n'
 
 profiles/base/make.defaults:ENV_UNSET="DBUS_SESSION_BUS_ADDRESS
 DISPLAY
