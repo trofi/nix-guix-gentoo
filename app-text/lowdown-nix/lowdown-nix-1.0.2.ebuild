@@ -1,8 +1,9 @@
 # Copyright 2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# ::nix-guix note: we fork app-text/lowdown::gentoo version:
-# has a hard time providing working library:
+# ::nix-guix note: we fork app-text/lowdown::gentoo version because it
+# has a hard time providing working library. A bit of past failed
+# attempts:
 # - https://bugs.gentoo.org/811111
 # - https://bugs.gentoo.org/832590
 # - https://bugs.gentoo.org/832797
