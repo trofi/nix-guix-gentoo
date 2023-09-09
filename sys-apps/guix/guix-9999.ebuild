@@ -80,8 +80,13 @@ for i in {1..64}; do
 done
 # media-gfx/graphviz provides 'dot'. Not needed for
 # release tarballs.
+# >=app-text/po4a-0.69-r1 is needed to generate
+# documentation. It needs to also include patch
+# pending upstream inclusion:
+#   https://github.com/mquinson/po4a/pull/437
 DEPEND="${RDEPEND}
 	media-gfx/graphviz
+	>=app-text/po4a-0.69-r1
 "
 
 PATCHES=(
