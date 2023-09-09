@@ -1,0 +1,244 @@
+https://github.com/mquinson/po4a/pull/437
+https://github.com/mquinson/po4a/commit/43db5c0b14ec2a8ba44d338bce024df87256457b.patch
+
+Without the change guix-9999 fails to build docs as:
+
+
+    contributing.de.texi:1448: @menu reference to nonexistent node `Sending a Patch Series'
+    make[2]: *** [Makefile:4969: doc/guix.de.info] Error 1
+
+From 43db5c0b14ec2a8ba44d338bce024df87256457b Mon Sep 17 00:00:00 2001
+From: Maxim Cournoyer <maxim.cournoyer@gmail.com>
+Date: Thu, 27 Jul 2023 17:44:49 -0400
+Subject: [PATCH] lib: Texinfo: Translate partial menu node names.
+
+Fixes <https://issues.guix.gnu.org/64881>.
+
+* lib/Locale/Po4a/Texinfo.pm (translate_buffer_menuentry): Refine
+regexp, so that it matches menu entries lacking a description.
+Only call 'translate_buffer' on the description if it was provided.
+* t/fmt/texinfo/partialmenus.trans: New file.
+* t/fmt/texinfo/partialmenus.texi: Likewise.
+* t/fmt/texinfo/partialmenus.pot: Likewise.
+* t/fmt/texinfo/partialmenus.po: Likewise.
+* t/fmt/texinfo/partialmenus.norm: Likewise.
+* t/fmt-texinfo.t: Register the new 'partialmenus' test.
+---
+ lib/Locale/Po4a/Texinfo.pm       |  7 +++---
+ t/fmt-texinfo.t                  |  2 +-
+ t/fmt/texinfo/partialmenus.norm  | 21 +++++++++++++++++
+ t/fmt/texinfo/partialmenus.po    | 40 ++++++++++++++++++++++++++++++++
+ t/fmt/texinfo/partialmenus.pot   | 40 ++++++++++++++++++++++++++++++++
+ t/fmt/texinfo/partialmenus.texi  | 14 +++++++++++
+ t/fmt/texinfo/partialmenus.trans | 21 +++++++++++++++++
+ 7 files changed, 141 insertions(+), 4 deletions(-)
+ create mode 100644 t/fmt/texinfo/partialmenus.norm
+ create mode 100644 t/fmt/texinfo/partialmenus.po
+ create mode 100644 t/fmt/texinfo/partialmenus.pot
+ create mode 100644 t/fmt/texinfo/partialmenus.texi
+ create mode 100644 t/fmt/texinfo/partialmenus.trans
+
+diff --git a/lib/Locale/Po4a/Texinfo.pm b/lib/Locale/Po4a/Texinfo.pm
+index b47506995..1c3a4bae2 100644
+--- a/lib/Locale/Po4a/Texinfo.pm
++++ b/lib/Locale/Po4a/Texinfo.pm
+@@ -336,7 +336,7 @@ sub translate_buffer_menuentry {
+ 
+     my $translated_buffer = "";
+ 
+-    if (   $buffer =~ m/^(.*?)(::)\s+(.*)$/s
++    if (   $buffer =~ m/^(.*?)(::)(?:\s+(.*))?$/s
+         or $buffer =~ m/^(.*?: .*?)(\.)\s+(.*)$/s )
+     {
+         my ( $name, $sep, $description ) = ( $1, $2, $3 );
+@@ -347,8 +347,9 @@ sub translate_buffer_menuentry {
+             $translated_buffer .= ' ' x ( $menu_sep_width - 1 - $l );
+             $l = $menu_sep_width - 1;
+         }
+-        ( $t, @e ) = $self->translate_buffer( $description, $no_wrap, @env );
+-
++        if ($description) {
++            ( $t, @e ) = $self->translate_buffer( $description, $no_wrap, @env );
++        }
+         # Replace newlines with space for proper wrapping
+         # See https://github.com/mquinson/po4a/issues/122
+         $t =~ s/\n/ /sg;
+diff --git a/t/fmt-texinfo.t b/t/fmt-texinfo.t
+index 4b067e436..d9ed5df30 100644
+--- a/t/fmt-texinfo.t
++++ b/t/fmt-texinfo.t
+@@ -10,7 +10,7 @@ use Testhelper;
+ 
+ my @tests;
+ 
+-for my $test (qw(longmenu comments tindex)) {
++for my $test (qw(longmenu partialmenus comments tindex)) {
+     push @tests,
+       {
+         'format' => 'texinfo',
+diff --git a/t/fmt/texinfo/partialmenus.norm b/t/fmt/texinfo/partialmenus.norm
+new file mode 100644
+index 000000000..992406820
+--- /dev/null
++++ b/t/fmt/texinfo/partialmenus.norm
+@@ -0,0 +1,21 @@
++\input texinfo
++@c ===========================================================================
++@c
++@c This file was generated with po4a. Translate the source file.
++@c
++@c ===========================================================================
++
++
++@c These menus do not contain a description, which used to cause a
++@c Texinfo menu entry to not be translated.
++@menu
++* A menu entry without any description::  A menu entry without any 
++                                            description
++* Optional menu name: The menu node::  Optional menu name: The menu node
++@end menu
++
++@node A menu entry without any description
++@chapter A menu entry without any description
++
++@node The menu node
++@chapter Optional menu name
+diff --git a/t/fmt/texinfo/partialmenus.po b/t/fmt/texinfo/partialmenus.po
+new file mode 100644
+index 000000000..31a14443e
+--- /dev/null
++++ b/t/fmt/texinfo/partialmenus.po
+@@ -0,0 +1,40 @@
++# SOME DESCRIPTIVE TITLE
++# Copyright (C) YEAR Free Software Foundation, Inc.
++# This file is distributed under the same license as the PACKAGE package.
++# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
++#
++#, fuzzy
++msgid ""
++msgstr ""
++"Project-Id-Version: PACKAGE VERSION\n"
++"POT-Creation-Date: 2023-07-27 17:29-0400\n"
++"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
++"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
++"Language-Team: LANGUAGE <LL@li.org>\n"
++"Language: \n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++
++#. type: chapter
++#: partialmenus.texi:8 partialmenus.texi:10 partialmenus.texi:11
++#, no-wrap
++msgid "A menu entry without any description"
++msgstr "A MENU ENTRY WITHOUT ANY DESCRIPTION"
++
++#. type: menuentry
++#: partialmenus.texi:8
++msgid "Optional menu name: The menu node"
++msgstr "OPTIONAL MENU NAME: THE MENU NODE"
++
++#. type: node
++#: partialmenus.texi:13
++#, no-wrap
++msgid "The menu node"
++msgstr "THE MENU NODE"
++
++#. type: chapter
++#: partialmenus.texi:14
++#, no-wrap
++msgid "Optional menu name"
++msgstr "OPTIONAL MENU NAME"
+diff --git a/t/fmt/texinfo/partialmenus.pot b/t/fmt/texinfo/partialmenus.pot
+new file mode 100644
+index 000000000..0379f805d
+--- /dev/null
++++ b/t/fmt/texinfo/partialmenus.pot
+@@ -0,0 +1,40 @@
++# SOME DESCRIPTIVE TITLE
++# Copyright (C) YEAR Free Software Foundation, Inc.
++# This file is distributed under the same license as the PACKAGE package.
++# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
++#
++#, fuzzy
++msgid ""
++msgstr ""
++"Project-Id-Version: PACKAGE VERSION\n"
++"POT-Creation-Date: 2023-08-16 09:47-0400\n"
++"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
++"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
++"Language-Team: LANGUAGE <LL@li.org>\n"
++"Language: \n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++
++#. type: chapter
++#: partialmenus.texi:8 partialmenus.texi:10 partialmenus.texi:11
++#, no-wrap
++msgid "A menu entry without any description"
++msgstr ""
++
++#. type: menuentry
++#: partialmenus.texi:8
++msgid "Optional menu name: The menu node"
++msgstr ""
++
++#. type: node
++#: partialmenus.texi:13
++#, no-wrap
++msgid "The menu node"
++msgstr ""
++
++#. type: chapter
++#: partialmenus.texi:14
++#, no-wrap
++msgid "Optional menu name"
++msgstr ""
+diff --git a/t/fmt/texinfo/partialmenus.texi b/t/fmt/texinfo/partialmenus.texi
+new file mode 100644
+index 000000000..f8663a2b6
+--- /dev/null
++++ b/t/fmt/texinfo/partialmenus.texi
+@@ -0,0 +1,14 @@
++\input texinfo
++
++@c These menus do not contain a description, which used to cause a
++@c Texinfo menu entry to not be translated.
++@menu
++* A menu entry without any description::
++* Optional menu name: The menu node::
++@end menu
++
++@node A menu entry without any description
++@chapter A menu entry without any description
++
++@node The menu node
++@chapter Optional menu name
+diff --git a/t/fmt/texinfo/partialmenus.trans b/t/fmt/texinfo/partialmenus.trans
+new file mode 100644
+index 000000000..0ef742a1b
+--- /dev/null
++++ b/t/fmt/texinfo/partialmenus.trans
+@@ -0,0 +1,21 @@
++\input texinfo
++@c ===========================================================================
++@c
++@c This file was generated with po4a. Translate the source file.
++@c
++@c ===========================================================================
++
++
++@c These menus do not contain a description, which used to cause a
++@c Texinfo menu entry to not be translated.
++@menu
++* A MENU ENTRY WITHOUT ANY DESCRIPTION::  A MENU ENTRY WITHOUT ANY 
++                                            DESCRIPTION
++* OPTIONAL MENU NAME: THE MENU NODE::  OPTIONAL MENU NAME: THE MENU NODE
++@end menu
++
++@node A MENU ENTRY WITHOUT ANY DESCRIPTION
++@chapter A MENU ENTRY WITHOUT ANY DESCRIPTION
++
++@node THE MENU NODE
++@chapter OPTIONAL MENU NAME
