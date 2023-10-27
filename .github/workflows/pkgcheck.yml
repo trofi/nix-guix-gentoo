@@ -17,8 +17,3 @@ jobs:
 
     - name: Run pkgcheck
       uses: pkgcore/pkgcheck-action@v1
-      # Workaround runner failures on python-3.12:
-      #   https://github.com/pkgcore/pkgcheck-action/issues/13
-      uses: actions/setup-python@v4
-      with:
-        python-version: 'pypy3.11'
