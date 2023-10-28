@@ -19,7 +19,6 @@ IUSE="llvm-libunwind"
 
 DEPEND=">=sys-kernel/linux-headers-2.6.39
 	virtual/libcrypt[static-libs]"
-RDEPEND=""
 
 PATCHES=("${FILESDIR}"/busybox-1.35.0-longer-lines.patch)
 
