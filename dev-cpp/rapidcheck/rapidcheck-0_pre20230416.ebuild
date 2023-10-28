@@ -22,5 +22,5 @@ src_install() {
 	cmake_src_install
 
 	# used by sys-apps/nix
-	cp -rv "${S}"/extras ${ED}/usr/include/rapidcheck || die
+	cp -rv "${S}"/extras "${ED}"/usr/include/rapidcheck || die
 }
