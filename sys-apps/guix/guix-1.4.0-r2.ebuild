@@ -47,7 +47,6 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.gz
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
 
 RESTRICT=test # complains about size of config.log and refuses to start tests
 

@@ -47,7 +47,6 @@ EGIT_REPO_URI="https://git.savannah.gnu.org/git/guix.git"
 LICENSE="GPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~x86"
-IUSE=""
 
 RESTRICT=test # complains about size of config.log and refuses to start tests
 
