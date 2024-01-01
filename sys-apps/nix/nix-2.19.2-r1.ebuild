@@ -169,9 +169,9 @@ src_install() {
 
 	newinitd "${FILESDIR}"/nix-daemon.initd nix-daemon
 
-    dodir /etc/sddm.conf.d
+	dodir /etc/sddm.conf.d
 	insinto /etc/sddm.conf.d
-    newins "${FILESDIR}"/sddm-nixbld.conf 50-nixbld.conf
+	newins "${FILESDIR}"/sddm-nixbld.conf 50-nixbld.conf
 
 	if ! use etc-profile; then
 		rm "${ED}"/etc/profile.d/nix.sh || die
