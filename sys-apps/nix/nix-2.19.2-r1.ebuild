@@ -169,7 +169,6 @@ src_install() {
 
 	newinitd "${FILESDIR}"/nix-daemon.initd nix-daemon
 
-	dodir /usr/lib/sddm/sddm.conf.d
 	insinto /usr/lib/sddm/sddm.conf.d
 	newins "${FILESDIR}"/sddm-nixbld.conf 50-nixbld.conf
 
