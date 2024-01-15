@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 BDEPEND="
-	dev-util/cmake
+	dev-build/cmake
 "
 
 src_install() {
