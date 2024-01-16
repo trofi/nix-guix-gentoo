@@ -61,9 +61,9 @@ DEPEND="${RDEPEND}
 
 # Upstream does not bundle .m4 files, extract from upstreams:
 # dev-util/pkgconfig: m4/pkg.m4
-# sys-devel/autoconf-archive: m4/ax_boost_base.m4, m4/ax_require_defined.m4
+# dev-build/autoconf-archive: m4/ax_boost_base.m4, m4/ax_require_defined.m4
 DEPEND+="
-	sys-devel/autoconf-archive
+	dev-build/autoconf-archive
 	virtual/pkgconfig
 "
 
