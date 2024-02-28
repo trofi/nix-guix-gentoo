@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit autotools git-r3 linux-info readme.gentoo-r1 systemd
+inherit autotools linux-info readme.gentoo-r1 systemd
 
 DESCRIPTION="GNU package manager (nix sibling)"
 HOMEPAGE="https://www.gnu.org/software/guix/"
@@ -41,12 +41,12 @@ copy_boot_guile_binaries() {
 	done
 }
 
-SRC_URI="$(binary_src_uris)"
-EGIT_REPO_URI="https://git.savannah.gnu.org/git/guix.git"
+SRC_URI="mirror://gnu/${PN}/${P}.tar.gz
+	$(binary_src_uris)"
 
 LICENSE="GPL-3"
 SLOT="0"
-#KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86"
 
 RESTRICT=test # complains about size of config.log and refuses to start tests
 
@@ -77,16 +77,8 @@ for i in {1..64}; do
 		>=acct-user/guixbuilder${i}-1
 	"
 done
-# media-gfx/graphviz provides 'dot'. Not needed for
-# release tarballs.
-# >=app-text/po4a-0.69-r1 is needed to generate
-# documentation. It needs to also include patch
-# pending upstream inclusion:
-#   https://github.com/mquinson/po4a/pull/437
-DEPEND="${RDEPEND}
-	media-gfx/graphviz
-	>=app-text/po4a-0.69-r1
-"
+
+DEPEND="${RDEPEND}"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.4.0_rc2-default-daemon.patch
@@ -129,9 +121,6 @@ src_prepare() {
 	copy_boot_guile_binaries
 
 	default
-
-	./bootstrap || die
-
 	# build system is very eager to run automake itself: bug #625166
 	eautoreconf
 
