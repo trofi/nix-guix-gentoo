@@ -106,7 +106,8 @@ src_prepare() {
 	default
 
 	eautoreconf
-	# workaround unhandled AC_CONFIG_AUX_DIR
+	# workaround unhandled AC_CONFIG_AUX_DIR in autotools.eclass:
+	#   https://bugs.gentoo.org/927017
 	cp config.guess config/config.guess || die
 	cp config.sub config/config.sub || die
 
