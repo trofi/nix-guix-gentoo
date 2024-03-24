@@ -55,7 +55,7 @@ for i in {1..64}; do
 done
 DEPEND="${RDEPEND}
 	dev-cpp/nlohmann_json
-	dev-cpp/rapidcheck
+	>=dev-cpp/rapidcheck-0_pre20231214
 	>=sys-devel/bison-2.6
 	>=sys-devel/flex-2.5.35
 "
