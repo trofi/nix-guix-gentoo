@@ -106,6 +106,12 @@ systemctl enable guix-daemon && systemctl start guix-daemon
 rc-update add guix-daemon && /etc/init.d/guix-daemon start
 ```
 
+You will likely want to enable binary cache:
+
+```sh
+guix archive --authorize < /usr/share/guix/ci.guix.gnu.org.pub
+```
+
 ### First run
 
 Upon first package installation `Guix` will create `~/.guix-profile` symlink to
