@@ -9,10 +9,11 @@ DESCRIPTION="static busybox for sys-apps/nix sandbox needs"
 HOMEPAGE="https://www.busybox.net/"
 MY_P=busybox-${PV/_/-}
 SRC_URI="https://www.busybox.net/downloads/${MY_P}.tar.bz2"
-KEYWORDS="~amd64 ~x86"
+S=${WORKDIR}/${MY_P}
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="~amd64 ~x86"
 # llvm-libunwind enables a hack to supply missing symbols for static
 # glibc linking.
 IUSE="llvm-libunwind"
@@ -21,8 +22,6 @@ DEPEND=">=sys-kernel/linux-headers-2.6.39
 	virtual/libcrypt[static-libs]"
 
 PATCHES=("${FILESDIR}"/busybox-1.35.0-longer-lines.patch)
-
-S=${WORKDIR}/${MY_P}
 
 busybox_set_config() {
 	local k=$1 v=$2
