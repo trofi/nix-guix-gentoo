@@ -19,6 +19,7 @@ MY_PV="VERSION_${PV//./_}"
 DESCRIPTION="Markdown translator producing HTML5, roff documents in the ms and man formats"
 HOMEPAGE="https://kristaps.bsd.lv/lowdown/"
 SRC_URI="https://github.com/kristapsdz/lowdown/archive/refs/tags/${MY_PV}.tar.gz -> lowdown-${PV}.tar.gz"
+S="${WORKDIR}/lowdown-${MY_PV}"
 
 LICENSE="ISC"
 SLOT="0"
@@ -36,8 +37,6 @@ DEPEND="
 	virtual/libcrypt:=
 "
 RDEPEND="${DEPEND}"
-
-S="${WORKDIR}/lowdown-${MY_PV}"
 
 src_configure() {
 	CC="$(tc-getCC)" \
