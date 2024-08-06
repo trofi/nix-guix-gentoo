@@ -89,7 +89,7 @@ DEPEND="${RDEPEND}
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-1.4.0_rc2-default-daemon.patch
+	"${FILESDIR}"/${PN}-9999-default-daemon.patch
 	"${FILESDIR}"/${PN}-1.3.0-compression-error.patch
 )
 
