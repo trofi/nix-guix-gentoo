@@ -50,9 +50,11 @@ KEYWORDS="~amd64 ~x86"
 
 RESTRICT=test # complains about size of config.log and refuses to start tests
 
+# guile-3.0.10 fails to expand some syntax maacros
+
 RDEPEND="
 	dev-libs/libgcrypt:0=
-	>=dev-scheme/guile-3:=[regex,networking,threads]
+	>=dev-scheme/guile-3:=[regex,networking,threads] <dev-scheme/guile-3.0.10:=[regex,networking,threads]
 	dev-scheme/bytestructures
 	dev-scheme/guile-gcrypt
 	>=dev-scheme/guile-git-0.2.0
