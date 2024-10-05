@@ -6,6 +6,7 @@
 		<name>Sergei Trofimovich</name>
 	</maintainer>
 	<use>
+		<flag name="allocate-build-users">Populate 'nixbld' group with 'nixbld*' users. </flag>
 		<flag name="etc-profile">Install /etc/profile.d/ entry to inject nix support for all users.</flag>
 		<flag name="gc">Enable garbage collection in the Nix expression evaluator (use <pkg>dev-libs/boehm-gc</pkg>).</flag>
 		<flag name="sodium">Use <pkg>dev-libs/libsodium</pkg> for cryptography</flag>
