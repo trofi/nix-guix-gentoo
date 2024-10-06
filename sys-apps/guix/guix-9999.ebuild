@@ -3,7 +3,9 @@
 
 EAPI=8
 
-inherit autotools git-r3 linux-info readme.gentoo-r1 systemd
+GUILE_COMPAT=( 3-0 )
+GUILE_REQ_USE="regex,networking,threads"
+inherit autotools git-r3 guile-single linux-info readme.gentoo-r1 systemd
 
 DESCRIPTION="GNU package manager (nix sibling)"
 HOMEPAGE="https://www.gnu.org/software/guix/"
@@ -54,18 +56,20 @@ RESTRICT=test # complains about size of config.log and refuses to start tests
 
 RDEPEND="
 	dev-libs/libgcrypt:0=
-	>=dev-scheme/guile-3:=[regex,networking,threads] <dev-scheme/guile-3.0.10:=[regex,networking,threads]
-	dev-scheme/bytestructures
-	dev-scheme/guile-gcrypt
-	>=dev-scheme/guile-git-0.2.0
-	>=dev-scheme/guile-json-4.3
-	dev-scheme/guile-lib
-	dev-scheme/guile-lzlib
-	dev-scheme/guile-sqlite3
-	dev-scheme/guile-ssh
-	>=dev-scheme/guile-zstd-0.1.1-r2
-	>=dev-scheme/guile-zlib-0.1.0-r2
-	dev-scheme/guile-gnutls
+	${GUILE_DEPS}
+	$(guile_gen_cond_dep '
+		dev-scheme/bytestructures[${GUILE_MULTI_USEDEP}]
+		dev-scheme/guile-gcrypt[${GUILE_MULTI_USEDEP}]
+		>=dev-scheme/guile-git-0.2.0[${GUILE_MULTI_USEDEP}]
+		>=dev-scheme/guile-json-4.3[${GUILE_MULTI_USEDEP}]
+		dev-scheme/guile-lib[${GUILE_MULTI_USEDEP}]
+		dev-scheme/guile-lzlib[${GUILE_MULTI_USEDEP}]
+		dev-scheme/guile-sqlite3[${GUILE_MULTI_USEDEP}]
+		dev-scheme/guile-ssh[${GUILE_MULTI_USEDEP}]
+		>=dev-scheme/guile-zstd-0.1.1-r2[${GUILE_MULTI_USEDEP}]
+		>=dev-scheme/guile-zlib-0.1.0-r2[${GUILE_MULTI_USEDEP}]
+		dev-scheme/guile-gnutls[${GUILE_MULTI_USEDEP}]
+	')
 	sys-libs/zlib
 	app-arch/bzip2
 	dev-db/sqlite
@@ -127,6 +131,11 @@ pkg_pretend() {
 	check_extra_config
 }
 
+pkg_setup() {
+	guile-single_pkg_setup
+	linux-info_pkg_setup
+}
+
 src_prepare() {
 	copy_boot_guile_binaries
 
@@ -137,20 +146,18 @@ src_prepare() {
 	# build system is very eager to run automake itself: bug #625166
 	eautoreconf
 
-	# guile is trying to avoid recompilation by checking if file
-	#     /usr/lib64/guile/2.2/site-ccache/guix/modules.go
-	# is newer than
-	#     guix/modules.scm
-	# In case it is instead of using 'guix/modules.scm' guile
-	# loads system one (from potentially older version of guix).
-	# To work it around we bump last modification timestamp of
-	# '*.scm' files.
-	# http://debbugs.gnu.org/cgi/bugreport.cgi?bug=38112
-	find "${S}" -name "*.scm" -exec touch {} + || die
+	guile_bump_sources
 
 	# Gentoo stores systemd unit files in lib, never in lib64: bug #689772
 	sed -i nix/local.mk \
 		-e 's|systemdservicedir = $(libdir)/systemd/system|systemdservicedir = '"$(systemd_get_systemunitdir)"'|' || die
+
+	sed -i \
+		build-aux/mdate-from-git.scm \
+		build-aux/test-driver.scm \
+		build-aux/xgettext.scm \
+		gnu/packages/game-development.scm \
+		-e "s|exec guile |exec ${GUILE} |g" || die
 }
 
 src_configure() {
@@ -176,9 +183,7 @@ src_install() {
 
 	newinitd "${FILESDIR}"/guix-daemon.initd guix-daemon
 
-	# Workaround llvm-strip problem of mangling guile ELF debug
-	# sections: https://bugs.gentoo.org/905898
-	dostrip -x "/usr/$(get_libdir)/guile"
+	guile_unstrip_ccache
 }
 
 pkg_postinst() {
