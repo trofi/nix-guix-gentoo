@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>slyich@gmail.com</email>
+		<name>Sergei Trofimovich</name>
+	</maintainer>
+	<use>
+		<flag name="allocate-build-users">Populate 'nixbld' group with 'nixbld*' users. Useful to disable when UID auto-allocation experiment is used.</flag>
+		<flag name="etc-profile">Install /etc/profile.d/ entry to inject nix support for all users.</flag>
+		<flag name="gc">Enable garbage collection in the Nix expression evaluator (use <pkg>dev-libs/boehm-gc</pkg>).</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">NixOS/nix</remote-id>
+	</upstream>
+</pkgmetadata>

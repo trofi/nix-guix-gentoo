@@ -1,0 +1,74 @@
+https://git.lix.systems/lix-project/lix/commit/fb1b21103733a2800aede0ffead2f0e91573c0c8.patch
+
+From fb1b21103733a2800aede0ffead2f0e91573c0c8 Mon Sep 17 00:00:00 2001
+From: vigress8 <vig@disroot.org>
+Date: Fri, 25 Oct 2024 15:19:52 +0400
+Subject: [PATCH] chore: remove monolithic `coreutils` requirement
+
+It's only used in a couple of tests, and only in such a way that
+replacing it with a random command suffices.
+I also removed a few pointless uses of the variable.
+
+Fixes: https://git.lix.systems/lix-project/lix/issues/376
+Change-Id: I90aedb61d64b02f7c9b007e72f9d614cc1b37a2e
+--- a/meson.build
++++ b/meson.build
+@@ -358,7 +358,6 @@ endif
+ #
+ # Build-time tools
+ #
+-coreutils = find_program('coreutils', native : true)
+ dot = find_program('dot', required : false, native : true)
+ pymod = import('python')
+ python = pymod.find_installation('python3')
+diff --git a/tests/functional/bash-profile.sh b/tests/functional/bash-profile.sh
+index 01e869202..98010eb1b 100644
+--- a/tests/functional/bash-profile.sh
++++ b/tests/functional/bash-profile.sh
+@@ -1,6 +1,6 @@
+ source common.sh
+ 
+-sed -e "s|@localstatedir@|$TEST_ROOT/profile-var|g" -e "s|@coreutils@|$coreutils|g" < ../../scripts/nix-profile.sh.in > $TEST_ROOT/nix-profile.sh
++sed -e "s|@localstatedir@|$TEST_ROOT/profile-var|g" < ../../scripts/nix-profile.sh.in > $TEST_ROOT/nix-profile.sh
+ 
+ user=$(whoami || echo -n nixbld)
+ rm -rf $TEST_HOME $TEST_ROOT/profile-var
+diff --git a/tests/functional/common/vars-and-functions.sh.in b/tests/functional/common/vars-and-functions.sh.in
+index 98892f660..99a859f49 100644
+--- a/tests/functional/common/vars-and-functions.sh.in
++++ b/tests/functional/common/vars-and-functions.sh.in
+@@ -44,7 +44,6 @@ DAEMON_PATH="$PATH"
+ if [[ -n "${NIX_DAEMON_PACKAGE:-}" ]]; then
+   DAEMON_PATH="${NIX_DAEMON_PACKAGE}/bin:$DAEMON_PATH"
+ fi
+-coreutils=@coreutils@
+ lsof=@lsof@
+ 
+ export dot=@dot@
+diff --git a/tests/functional/config.nix.in b/tests/functional/config.nix.in
+index 00dc007e1..fcba3c603 100644
+--- a/tests/functional/config.nix.in
++++ b/tests/functional/config.nix.in
+@@ -10,7 +10,7 @@ in
+ rec {
+   shell = "@bash@";
+ 
+-  path = "@coreutils@";
++  path = "@ls@";
+ 
+   system = "@system@";
+ 
+diff --git a/tests/functional/meson.build b/tests/functional/meson.build
+index f56ced48d..7143e3df1 100644
+--- a/tests/functional/meson.build
++++ b/tests/functional/meson.build
+@@ -1,6 +1,8 @@
++ls = find_program('ls', native : true)
++
+ test_confdata = {
+   'bindir': bindir,
+-  'coreutils': fs.parent(coreutils.full_path()),
++  'ls': fs.parent(ls.full_path()),
+   'lsof': lsof.full_path(),
+   'dot': dot.found() ? dot.full_path() : '',
+   'bash': bash.full_path(),

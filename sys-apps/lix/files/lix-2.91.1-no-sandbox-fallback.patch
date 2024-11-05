@@ -1,0 +1,31 @@
+From 7f90eac69bdad6126530dbea314e4b9e974a5d91 Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Mon, 10 Jul 2023 08:37:18 +0100
+Subject: [PATCH] src/libstore/globals.hh: disable sandbox fallback
+
+sandbox fallbacks is very dangerous as host's paths tend to leak into
+build sandbox all the time from default search paths like /usr/bin.
+
+On linux build sandbox should always be enabled. THere are various
+reasons why sandbox fails to be enabled:
+
+- missing 'mount' and 'pid' namespace support in the kernel
+- extra (usually read-only) /proc mounts on top of vanilla /proc
+
+Try to address these problems first before trying to disable the
+sandbox.
+---
+ src/libstore/globals.hh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/src/libstore/globals.hh
++++ b/src/libstore/globals.hh
+@@ -521,7 +521,7 @@ public:
+         )",
+         {"build-chroot-dirs", "build-sandbox-paths"}};
+ 
+-    Setting<bool> sandboxFallback{this, true, "sandbox-fallback",
++    Setting<bool> sandboxFallback{this, false, "sandbox-fallback",
+         "Whether to disable sandboxing when the kernel doesn't allow it."};
+ 
+ #if __linux__
