@@ -24,6 +24,8 @@ BDEPEND="
 	)
 "
 # sys-apps/busybox-nix-sandbox-shell is needed for sandbox mount of /bin/sh
+# sys-kernel/linux-headers is needed to have newer syscal numbers for seccomp:
+#   https://github.com/trofi/nix-guix-gentoo/issues/52#issuecomment-2461969243
 RDEPEND="
 	app-arch/brotli
 	app-arch/bzip2
@@ -42,6 +44,7 @@ RDEPEND="
 	>=dev-libs/boost-1.66:0=[context]
 	net-misc/curl
 	sys-apps/busybox-nix-sandbox-shell
+	>=sys-kernel/linux-headers-6.7
 	sys-libs/libseccomp
 	sys-libs/zlib
 	gc? ( >=dev-libs/boehm-gc-8.2.6[cxx] )
