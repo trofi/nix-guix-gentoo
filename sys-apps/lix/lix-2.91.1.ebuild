@@ -81,14 +81,6 @@ RDEPEND+="
 	!!sys-apps/nix
 "
 
-# Upstream does not bundle .m4 files, extract from upstreams:
-# dev-util/pkgconfig: m4/pkg.m4
-# dev-build/autoconf-archive: m4/ax_boost_base.m4, m4/ax_require_defined.m4
-DEPEND+="
-	dev-build/autoconf-archive
-	virtual/pkgconfig
-"
-
 PATCHES=(
 	# local patch
 	"${FILESDIR}"/lix-2.91.1-no-sandbox-fallback.patch
