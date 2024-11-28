@@ -126,6 +126,9 @@ src_prepare() {
 
 	# inject rapidcheck extra includes
 	export CXXFLAGS="${CXXFLAGS} -I${EPREFIX}/usr/include/rapidcheck/extras/gtest/include"
+
+	# Avoid sandbox failures accessing /var/lib/portage/home/.local
+	sed -e "s@'/dummy@'${T}/dummy@g" -i doc/manual/meson.build || die
 }
 
 src_configure() {
