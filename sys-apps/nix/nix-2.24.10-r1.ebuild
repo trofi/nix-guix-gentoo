@@ -83,6 +83,7 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.10-libpaths.patch
 	"${FILESDIR}"/${PN}-2.16-no-sandbox-fallback.patch
 	"${FILESDIR}"/${PN}-2.22-no-sandbox-fallback-README.patch
+	"${FILESDIR}"/${PN}-2.24-doc-destdir.patch
 )
 
 DISABLE_AUTOFORMATTING=yes
