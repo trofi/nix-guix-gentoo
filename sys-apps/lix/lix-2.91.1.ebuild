@@ -66,11 +66,14 @@ done
 RDEPEND+="
 	)
 "
+
+# sys-process/lsof is only needed for tests, but it's unconditional.
 DEPEND="${RDEPEND}
 	app-text/lix-doc
 	dev-cpp/nlohmann_json
 	dev-cpp/toml11
 	>=dev-cpp/rapidcheck-0_pre20231214
+	sys-process/lsof
 	>=sys-devel/bison-2.6
 	>=sys-devel/flex-2.5.35
 "
