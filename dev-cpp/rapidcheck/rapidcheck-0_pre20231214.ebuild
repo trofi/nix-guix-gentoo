@@ -12,7 +12,7 @@ COMMIT_ID=ff6af6fc683159deb51c543b065eba14dfcf329b
 SRC_URI="https://github.com/emil-e/rapidcheck/archive/${COMMIT_ID}.tar.gz -> ${P}.tar.gz"
 LICENSE="BSD-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 BDEPEND="
 	dev-build/cmake
