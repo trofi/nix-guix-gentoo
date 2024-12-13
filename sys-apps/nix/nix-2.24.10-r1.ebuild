@@ -11,7 +11,7 @@ HOMEPAGE="https://nixos.org/nix"
 SRC_URI="https://github.com/NixOS/nix/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="+allocate-build-users +etc-profile +gc doc +sodium"
 
 BDEPEND="
