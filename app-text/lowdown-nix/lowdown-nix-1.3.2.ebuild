@@ -23,7 +23,7 @@ S="${WORKDIR}/lowdown-${MY_PV}"
 
 LICENSE="ISC"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 # By default portage runs 'strip -g' on .a files.
 # This is known to break liblowdown.a when it's built with -flto:
