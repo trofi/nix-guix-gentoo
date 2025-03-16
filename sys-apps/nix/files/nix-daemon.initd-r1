@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+# Copyright 1999-2017 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+# Apply limits similar to to upstream's systemd ones:
+#   https://github.com/NixOS/nix/blob/e4bda20918ad2af690c2e938211a7d362548e403/misc/systemd/nix-daemon.service.in#L12
+rc_ulimit="-n 1048576"
+
+start() {
+	ebegin "Starting ${SVCNAME}"
+	start-stop-daemon --start --quiet --background --exec /usr/bin/nix-daemon
+	eend ${?}
+}
+
+stop() {
+	ebegin "Stopping ${SVCNAME}"
+	start-stop-daemon --stop --quiet --exec /usr/bin/nix-daemon
+	eend ${?}
+}
