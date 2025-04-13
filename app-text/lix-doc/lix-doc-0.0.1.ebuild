@@ -47,6 +47,6 @@ cargo_src_install() {
 	# $ cargo install --path . --root ${PWD}/__i__
 	# error: no packages found with binaries or examples
 
-	# Pick a file like 'target/x86_64-unknown-linux-gnu/release/liblix_doc.a'
-	dolib.a target/*/*/liblix_doc.a
+	# Pick a file like 'target/release/liblix_doc.a'
+	dolib.a target/*/liblix_doc.a
 }
