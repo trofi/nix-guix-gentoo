@@ -26,6 +26,7 @@ BDEPEND="
 	)
 	$(python_gen_any_dep '
 		dev-python/python-frontmatter[${PYTHON_USEDEP}]
+		dev-python/pyyaml[${PYTHON_USEDEP}]
 	')
 	clang? (
 		llvm-core/clang
@@ -122,6 +123,7 @@ Next steps:
 
 python_check_deps() {
 	python_has_version "dev-python/python-frontmatter[${PYTHON_USEDEP}]"
+	python_has_version "dev-python/pyyaml[${PYTHON_USEDEP}]"
 }
 
 pkg_pretend() {
@@ -132,7 +134,7 @@ pkg_pretend() {
 }
 
 pkg_setup() {
-	python_pkg_setup
+	python-any-r1_pkg_setup 
 	rust_pkg_setup
 }
 
