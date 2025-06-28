@@ -1,3 +1,11 @@
+# Sergei Trofimovich <slyich@gmail.com> (2025-06-28)
+# app-text/lix-doc was a workaround package for `lix-2.91.0`.
+# Newer `lix` versions use cargo to build the documentation
+# dependencies within a single ebuild. Safe to remove the
+# package:
+#     # emerge -C app-text/lix-doc
+app-text/lix-doc
+
 # Sergei Trofimovich <slyich@gmail.com> (2023-07-05)
 # guix needs guile-3 (still masked in ::gentoo): https://bugs.gentoo.org/705554
 #
