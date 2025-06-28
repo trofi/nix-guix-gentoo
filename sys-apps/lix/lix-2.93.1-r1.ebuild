@@ -79,7 +79,6 @@ RDEPEND+="
 
 # sys-process/lsof is only needed for tests, but it's unconditional.
 DEPEND="${RDEPEND}
-	app-text/lix-doc
 	dev-cpp/nlohmann_json
 	dev-cpp/toml11
 	>=dev-cpp/rapidcheck-0_pre20231214
@@ -240,9 +239,6 @@ src_install() {
 	# nix-daemon.sh should not be used for users' profile.
 	# Only for daemon itself.
 	rm "${ED}"/etc/profile.d/nix-daemon.sh || die
-
-	# conflicts with app-text/lix-doc, should not be needed
-	rm "${ED}"/usr/$(get_libdir)/liblix_doc.a || die
 }
 
 pkg_postinst() {
