@@ -5,13 +5,3 @@
 # package:
 #     # emerge -C app-text/lix-doc
 app-text/lix-doc
-
-# Sergei Trofimovich <slyich@gmail.com> (2023-07-05)
-# guix needs guile-3 (still masked in ::gentoo): https://bugs.gentoo.org/705554
-#
-# To unmask needed guile use:
-#
-#     # mkdir -p /etc/portage/package.unmask
-#     # echo "sys-apps/guix::nix-guix" >> /etc/portage/package.unmask/nix-guix
-#     # echo "dev-scheme/guile"        >> /etc/portage/package.unmask/nix-guix
->=sys-apps/guix-1.3.0
