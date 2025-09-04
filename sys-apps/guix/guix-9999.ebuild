@@ -60,7 +60,7 @@ RDEPEND="
 	$(guile_gen_cond_dep '
 		dev-scheme/bytestructures[${GUILE_MULTI_USEDEP}]
 		dev-scheme/guile-gcrypt[${GUILE_MULTI_USEDEP}]
-		>=dev-scheme/guile-git-0.2.0[${GUILE_MULTI_USEDEP}]
+		>=dev-scheme/guile-git-0.10.0[${GUILE_MULTI_USEDEP}]
 		>=dev-scheme/guile-json-4.3[${GUILE_MULTI_USEDEP}]
 		dev-scheme/guile-lib[${GUILE_MULTI_USEDEP}]
 		dev-scheme/guile-lzlib[${GUILE_MULTI_USEDEP}]
