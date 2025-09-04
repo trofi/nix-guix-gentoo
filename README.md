@@ -66,7 +66,7 @@ nix-channel --add https://nixos.org/channels/nixpkgs-unstable
 nix-channel --update
 ```
 
-You are done!
+You are done! Except you have no packages.
 
 Now it's a good idea to check basic functionality:
 
@@ -74,17 +74,19 @@ Now it's a good idea to check basic functionality:
 # run a program without installation:
 nix-shell -p re2c --run "re2c --version"
 > re2c 3.0
-
-# install and run a program:
-nix-env -iA nixpkgs.re2c --no-sandbox
-> installing 're2c-3.0'
-
 re2c --version
 > re2c 3.0
-
-nix-env -e re2c
-> uninstalling 're2c-3.0'
 ```
+
+Install some packages declaratively: 
+
+Nixtoo Genux™ (a new better linux distro™)
+The guide includes a profile that uses a flake to install packages on
+the machine using flakey. It is also possible to use it for a dev shell.
+
+<https://therealtruex.com/posts/Nixtoo-Genux-released>
+
+*Note:* `nix-env` *is not recommended! Use Nixtoo Genux™*
 
 Next steps to try `nix` in action:
 
