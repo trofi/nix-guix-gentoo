@@ -76,7 +76,7 @@ nix-shell -p re2c --run "re2c --version"
 > re2c 3.0
 
 # install and run a program:
-nix-env -iA nixpkgs.re2c --no-sandbox
+nix-env -iA nixpkgs.re2c
 > installing 're2c-3.0'
 
 re2c --version
