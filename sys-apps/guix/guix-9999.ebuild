@@ -64,6 +64,7 @@ RDEPEND="
 		>=dev-scheme/guile-json-4.3[${GUILE_MULTI_USEDEP}]
 		dev-scheme/guile-lib[${GUILE_MULTI_USEDEP}]
 		dev-scheme/guile-lzlib[${GUILE_MULTI_USEDEP}]
+		dev-scheme/guile-semver[${GUILE_MULTI_USEDEP}]
 		dev-scheme/guile-sqlite3[${GUILE_MULTI_USEDEP}]
 		dev-scheme/guile-ssh[${GUILE_MULTI_USEDEP}]
 		>=dev-scheme/guile-zstd-0.1.1-r2[${GUILE_MULTI_USEDEP}]
