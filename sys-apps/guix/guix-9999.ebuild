@@ -96,7 +96,6 @@ DEPEND="${RDEPEND}
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-9999-default-daemon.patch
 	"${FILESDIR}"/${PN}-1.3.0-compression-error.patch
 	"${FILESDIR}"/${PN}-9999-gcc-15.patch
 )
@@ -171,6 +170,18 @@ src_configure() {
 src_install() {
 	# TODO: emacs highlighter
 	default
+
+	# Don't require user to create profile manually even before guix-daemon runs.
+	# Default install should provide working basic environment.
+	sed \
+		-e "s|${EPREFIX}/var/guix/profiles/per-user/root/current-guix/bin/guix-daemon|${EPREFIX}/usr/bin/guix-daemon|g" \
+		-e "s|${EPREFIX}/var/guix/profiles/per-user/root/current-guix/bin/guix |${EPREFIX}/usr/bin/guix |g" \
+		-i \
+		"${ED}"/usr/"$(get_libdir)"/upstart/system/guix-daemon.conf \
+		"${ED}"/usr/"$(get_libdir)"/upstart/system/guix-publish.conf \
+		"${ED}"/usr/lib/systemd/system/guix-daemon.service \
+		"${ED}"/usr/lib/systemd/system/guix-gc.service \
+		"${ED}"/usr/lib/systemd/system/guix-publish.service || die
 
 	readme.gentoo_create_doc
 
