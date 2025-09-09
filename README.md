@@ -74,24 +74,22 @@ Now it's a good idea to check basic functionality:
 # run a program without installation:
 nix-shell -p re2c --run "re2c --version"
 > re2c 3.0
+
+# install and run a program with nix-env (impure):
+nix-env -iA nixpkgs.re2c
+> installing 're2c-3.0'
+
 re2c --version
 > re2c 3.0
 ```
 
 Install some packages declaratively: 
 
-Nixtoo Genux™ (a new better linux distro™)
-The guide includes a profile that uses a flake to install packages on
-the machine using flakey. It is also possible to use it for a dev shell.
-
-<https://therealtruex.com/posts/Nixtoo-Genux-released>
-
-*Note:* `nix-env` *is not recommended! Use Nixtoo Genux™*
-
 Next steps to try `nix` in action:
 
 - <https://trofi.github.io/posts/196-nix-on-gentoo-howto.html>
 - <https://nixos.org/manual/nixpkgs/stable/>
+- use a profile/flake <https://github.com/equwal/nixtoo-genux/tree/master>
 
 ## Guix
 
