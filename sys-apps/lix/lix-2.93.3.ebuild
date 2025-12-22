@@ -56,7 +56,7 @@ RDEPEND="
 	sys-apps/busybox-nix-sandbox-shell
 	>=sys-kernel/linux-headers-6.7
 	sys-libs/libseccomp
-	sys-libs/zlib
+	virtual/zlib:=
 	gc? ( >=dev-libs/boehm-gc-8.2.6[cxx] )
 	doc? ( dev-libs/libxml2
 		dev-libs/libxslt
@@ -133,7 +133,7 @@ pkg_pretend() {
 }
 
 pkg_setup() {
-	python-any-r1_pkg_setup 
+	python-any-r1_pkg_setup
 	rust_pkg_setup
 }
 
