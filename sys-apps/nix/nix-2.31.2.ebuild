@@ -39,7 +39,7 @@ RDEPEND="
 	net-misc/curl
 	sys-apps/busybox-nix-sandbox-shell
 	sys-libs/libseccomp
-	sys-libs/zlib
+	virtual/zlib:=
 	gc? ( >=dev-libs/boehm-gc-8.2.6[cxx] )
 	doc? ( dev-libs/libxml2
 		dev-libs/libxslt
