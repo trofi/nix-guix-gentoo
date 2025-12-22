@@ -66,7 +66,7 @@ RDEPEND="
 	>=dev-scheme/guile-zstd-0.1.1-r2
 	>=dev-scheme/guile-zlib-0.1.0-r2
 	dev-scheme/guile-gnutls
-	sys-libs/zlib
+	virtual/zlib:=
 	app-arch/bzip2
 	dev-db/sqlite
 "

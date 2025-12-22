@@ -70,7 +70,7 @@ RDEPEND="
 		>=dev-scheme/guile-zlib-0.1.0-r2[${GUILE_MULTI_USEDEP}]
 		dev-scheme/guile-gnutls[${GUILE_MULTI_USEDEP}]
 	')
-	sys-libs/zlib
+	virtual/zlib:=
 	app-arch/bzip2
 	dev-db/sqlite
 "
