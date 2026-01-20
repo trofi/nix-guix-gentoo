@@ -97,7 +97,6 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.3.0-compression-error.patch
-	"${FILESDIR}"/${PN}-9999-gcc-15.patch
 )
 
 QA_PREBUILT="usr/share/guile/site/*/gnu/packages/bootstrap/*"
