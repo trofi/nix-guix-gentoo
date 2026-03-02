@@ -3,16 +3,15 @@
 
 EAPI=8
 
-inherit git-r3 linux-info meson readme.gentoo-r1 tmpfiles
+inherit linux-info meson readme.gentoo-r1 tmpfiles
 
 DESCRIPTION="A purely functional package manager"
 HOMEPAGE="https://nixos.org/nix"
 
-#SRC_URI="https://github.com/NixOS/nix/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
-EGIT_REPO_URI="https://github.com/NixOS/nix.git"
+SRC_URI="https://github.com/NixOS/nix/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
-#KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="+allocate-build-users +etc-profile +gc doc"
 
 BDEPEND="
@@ -81,8 +80,8 @@ RDEPEND+="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-9999-no-sandbox-fallback.patch
-	"${FILESDIR}"/${PN}-9999-no-sandbox-fallback-README.patch
+	"${FILESDIR}"/${PN}-2.34.0-no-sandbox-fallback.patch
+	"${FILESDIR}"/${PN}-2.34.0-no-sandbox-fallback-README.patch
 )
 
 DISABLE_AUTOFORMATTING=yes
