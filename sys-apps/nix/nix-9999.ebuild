@@ -121,6 +121,10 @@ src_prepare() {
 	export PATH="$PATH:${EPREFIX}/usr/$(get_libdir)/lowdown-nix/bin"
 
 	export CXXFLAGS="${CXXFLAGS} -I${EPREFIX}/usr/include/rapidcheck/extras/gtest/include"
+
+	# Avoid build failures on -Werror=enum-switch for clang tools.
+	sed -e "s/'-Werror=switch-enum'/'-Wno-error=switch-enum'/g" \
+		-i nix-meson-build-support/common/meson.build || die
 }
 
 src_configure() {
