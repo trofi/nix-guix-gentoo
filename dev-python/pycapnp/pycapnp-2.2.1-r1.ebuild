@@ -23,7 +23,4 @@ BDEPEND="
 "
 RDEPEND="dev-libs/capnproto"
 
-# TODO: sort out how libcapnp is bundled here.
-# Need to unbundle.
-
 distutils_enable_tests pytest
