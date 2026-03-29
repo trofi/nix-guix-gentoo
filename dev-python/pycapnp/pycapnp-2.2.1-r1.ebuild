@@ -21,6 +21,7 @@ BDEPEND="
 	>=dev-python/cython-3[${PYTHON_USEDEP}]
 	dev-python/pkgconfig[${PYTHON_USEDEP}]
 "
+RDEPEND="dev-libs/capnproto"
 
 # TODO: sort out how libcapnp is bundled here.
 # Need to unbundle.
