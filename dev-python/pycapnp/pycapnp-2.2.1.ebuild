@@ -20,8 +20,6 @@ BDEPEND="
 	>=dev-python/cython-3[${PYTHON_USEDEP}]
 	dev-python/pkgconfig[${PYTHON_USEDEP}]
 "
-
-# TODO: sort out how libcapnp is bundled here.
-# Need to unbundle.
+RDEPEND="dev-libs/capnproto"
 
 distutils_enable_tests pytest
