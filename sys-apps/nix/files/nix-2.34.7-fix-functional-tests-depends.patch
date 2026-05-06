@@ -1,0 +1,41 @@
+From: Huang Rui <vowstar@gmail.com>
+Subject: [PATCH] tests/functional: drop find_program('nix') from test(depends:)
+
+Meson >= 1.3 strictly type-checks the `depends` keyword of `test()`
+and only accepts BuildTarget / CustomTarget / CustomTargetIndex.
+
+When the functional-tests subproject is built as part of the top-level
+nix build (which is the case for a normal `meson setup` of the nix
+source tree, since meson.build pulls in `subproject('nix-functional-tests')`),
+`meson.is_subproject()` becomes true and the code below adds
+`[ nix ]` -- the result of `find_program('nix')`, i.e. a LocalProgram --
+into `depends`. Meson then aborts configure with:
+
+  ERROR: test keyword argument 'depends' was of type
+  "array[CustomTarget | LocalProgram]" but should have been
+  "array[BuildTarget | CustomTarget | CustomTargetIndex]"
+
+The accompanying `nix_symlinks_targets` are real custom_target() entries
+and they themselves declare `depends : this_exe` on the nix executable
+build target (see src/nix/meson.build), so removing `[ nix ]` from the
+list does not lose the rebuild dependency -- the symlink targets still
+force `nix` to be rebuilt before the tests run.
+
+Bug: https://github.com/NixOS/nix/issues/13683
+--- a/tests/functional/meson.build
++++ b/tests/functional/meson.build
+@@ -237,7 +237,13 @@
+   deps = suite['deps']
+   if meson.is_subproject()
+     nix_subproject = subproject('nix')
+-    deps += [ nix ] + nix_subproject.get_variable('nix_symlinks_targets')
++    # Do not put `nix` (a find_program() result / LocalProgram) into
++    # test(depends: ...): Meson >= 1.3 rejects it with
++    # "depends was of type array[CustomTarget | LocalProgram] but should
++    # have been array[BuildTarget | CustomTarget | CustomTargetIndex]".
++    # The symlink custom_targets already depend on the nix executable
++    # build target, so they are sufficient to trigger a rebuild.
++    deps += nix_subproject.get_variable('nix_symlinks_targets')
+   endif
+   foreach script : suite['tests']
+     # Turns, e.g., `tests/functional/flakes/show.sh` into a Meson test target called
