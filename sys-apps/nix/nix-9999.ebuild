@@ -83,6 +83,7 @@ RDEPEND+="
 PATCHES=(
 	"${FILESDIR}"/${PN}-9999-no-sandbox-fallback.patch
 	"${FILESDIR}"/${PN}-9999-no-sandbox-fallback-README.patch
+	"${FILESDIR}"/${PN}-2.34.7-fix-functional-tests-depends.patch
 )
 
 DISABLE_AUTOFORMATTING=yes
