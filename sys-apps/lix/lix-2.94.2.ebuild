@@ -6,7 +6,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{10..14} )
 
 inherit linux-info meson python-any-r1 readme.gentoo-r1 rust tmpfiles toolchain-funcs
 
