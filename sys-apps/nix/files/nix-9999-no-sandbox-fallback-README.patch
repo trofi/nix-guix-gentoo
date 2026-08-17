@@ -6,12 +6,8 @@ Subject: [PATCH] local-derivation-goal.cc: refer to the README.md on how to
 
 --- a/src/libstore/unix/build/derivation-builder.cc
 +++ b/src/libstore/unix/build/derivation-builder.cc
-@@ -2101,7 +2101,7 @@ std::unique_ptr<DerivationBuilder, DerivationBuilderDeleter> makeDerivationBuild
-     if (useSandbox && !mountAndPidNamespacesSupported()) {
+@@ -2101,3 +2101,3 @@ std::unique_ptr<DerivationBuilder, DerivationBuilderDeleter> makeDerivationBuild
          if (!localSettings.sandboxFallback)
              throw Error(
 -                "this system does not support the kernel namespaces that are required for sandboxing; use '--no-sandbox' to disable sandboxing");
 +                "failed to enable PID and USER namespace: see https://github.com/trofi/nix-guix-gentoo#missing-sandbox-support for ways to fix and workaround it.");
-         debug("auto-disabling sandboxing because the prerequisite namespaces are not available");
-         useSandbox = false;
-     }
