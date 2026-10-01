@@ -1,13 +1,26 @@
-From 75e19af67b7b11eb2c7cfcba54ace16d85eccdf1 Mon Sep 17 00:00:00 2001
-From: Sergei Trofimovich <slyich@gmail.com>
-Date: Mon, 10 Jul 2023 09:22:35 +0100
-Subject: [PATCH] local-derivation-goal.cc: refer to the README.md on how to
+From 8a86b0f16f4a5ef7f33c086e82a66eac4a9ec698 Mon Sep 17 00:00:00 2001
+From: Aleksandr keng <226012442+kengusername@users.noreply.github.com>
+Date: Thu, 1 Oct 2026 11:33:25 +0200
+Subject: [PATCH] unix-derivation-builder.cc: refer to the README.md on how to
  get it back
 
---- a/src/libstore/unix/build/derivation-builder.cc
-+++ b/src/libstore/unix/build/derivation-builder.cc
-@@ -2101,3 +2101,3 @@ std::unique_ptr<DerivationBuilder, DerivationBuilderDeleter> makeDerivationBuild
+Signed-off-by: Aleksandr keng <226012442+kengusername@users.noreply.github.com>
+---
+ src/libstore/unix/build/unix-derivation-builder.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libstore/unix/build/unix-derivation-builder.cc b/src/libstore/unix/build/unix-derivation-builder.cc
+index d59f2fff2..75496565c 100644
+--- a/src/libstore/unix/build/unix-derivation-builder.cc
++++ b/src/libstore/unix/build/unix-derivation-builder.cc
+@@ -1099,7 +1099,7 @@ std::unique_ptr<DerivationBuilder, DerivationBuilderDeleter> makeDerivationBuild
+     if (useSandbox && !mountAndPidNamespacesSupported()) {
          if (!localSettings.sandboxFallback)
              throw Error(
 -                "this system does not support the kernel namespaces that are required for sandboxing; use '--no-sandbox' to disable sandboxing");
 +                "failed to enable PID and USER namespace: see https://github.com/trofi/nix-guix-gentoo#missing-sandbox-support for ways to fix and workaround it.");
+
+         if (isRelocatedStore)
+             throw Error(
+--
+2.55.0
