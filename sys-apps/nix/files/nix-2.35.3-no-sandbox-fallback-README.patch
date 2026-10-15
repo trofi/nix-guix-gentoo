@@ -1,0 +1,13 @@
+diff --git a/src/libstore/unix/build/derivation-builder.cc b/src/libstore/unix/build/derivation-builder.cc
+index 386d3f863..d0c12c072 100644
+--- a/src/libstore/unix/build/derivation-builder.cc
++++ b/src/libstore/unix/build/derivation-builder.cc
+@@ -1791,7 +1791,7 @@ std::unique_ptr<DerivationBuilder, DerivationBuilderDeleter> makeDerivationBuild
+     if (useSandbox && !mountAndPidNamespacesSupported()) {
+         if (!localSettings.sandboxFallback)
+             throw Error(
+-                "this system does not support the kernel namespaces that are required for sandboxing; use '--no-sandbox' to disable sandboxing");
++                "failed to enable PID and USER namespace: see https://github.com/trofi/nix-guix-gentoo#missing-sandbox-support for ways to fix and workaround it.");
+ 
+         if (isRelocatedStore)
+             throw Error(
