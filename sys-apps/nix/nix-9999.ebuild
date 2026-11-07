@@ -126,6 +126,12 @@ src_prepare() {
 	# Avoid build failures on -Werror=enum-switch for clang tools.
 	sed -e "s/'-Werror=switch-enum'/'-Wno-error=switch-enum'/g" \
 		-i nix-meson-build-support/common/meson.build || die
+
+	# Avoid automagic dependency on LLVM, upstream `nix` has incomplete
+	# detection on `clang-dity` headers and fails the build when LLVM
+	# alone is present: https://github.com/trofi/nix-guix-gentoo/issues/83#issuecomment-6703907882
+	sed -e "s/dependency('LLVM'/dependency('LLVM-does-not-exist'/g" \
+		-i src/clang-tidy-plugin/meson.build || die
 }
 
 src_configure() {
